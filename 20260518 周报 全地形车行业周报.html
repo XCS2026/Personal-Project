@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+<title>20260518 周报 全地形车行业周报</title>
+<style>
+:root {
+    --bg: #0a0e17;
+    --bg2: #131a2e;
+    --bg3: #1a2540;
+    --border: #1e3050;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --accent: #38bdf8;
+    --accent2: #60a5fa;
+    --green: #4ade80;
+    --red: #f87171;
+    --amber: #fbbf24;
+    --header-grad: linear-gradient(135deg, #0c4a6e, #1e3a5f, #0a0e17);
+    --tr: 226, 232, 240;
+    --tg: 148, 163, 184;
+    --tb: 100, 116, 139;
+    --ta: 56, 189, 248;
+}
+body[data-theme="frost"] {
+    --bg: #f0f4fc; --bg2: #ffffff; --bg3: #e8edf6; --border: #d0d8e8;
+    --text: #1a2a4a; --text2: #3d4f6f; --text3: #6b7fa0;
+    --header-grad: linear-gradient(135deg, #d0dff0, #e8eef8, #f0f4fc);
+    --tr: 30, 42, 74; --tg: 61, 79, 111; --tb: 107, 127, 160; --ta: 37, 99, 235;
+}
+body[data-theme="amber"] {
+    --bg: #fdf6e3; --bg2: #fffef5; --bg3: #f5edd6; --border: #d8c9a0;
+    --text: #3d2b10; --text2: #6b5030; --text3: #9a7b55;
+    --header-grad: linear-gradient(135deg, #d4b87a, #e8dbb0, #fdf6e3);
+    --tr: 61, 43, 16; --tg: 107, 80, 48; --tb: 154, 123, 85; --ta: 180, 120, 30;
+}
+body[data-theme="warm"] {
+    --bg: #1a1510; --bg2: #242018; --bg3: #302a20; --border: #40382a;
+    --text: #d0c8b8; --text2: #a09880; --text3: #807060;
+    --header-grad: linear-gradient(135deg, #2a2015, #1a1510, #151010);
+    --tr: 208, 200, 184; --tg: 160, 152, 128; --tb: 128, 112, 96; --ta: 180, 160, 100;
+}
+body[data-theme="graphite"] {
+    --bg: #14141c; --bg2: #1c1c28; --bg3: #242434; --border: #303048;
+    --text: #d0d0da; --text2: #a0a0b0; --text3: #707088;
+    --header-grad: linear-gradient(135deg, #1c1c30, #181828, #14141c);
+    --tr: 208, 208, 218; --tg: 160, 160, 176; --tb: 112, 112, 136; --ta: 140, 140, 200;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.header { background: var(--header-grad); padding: 16px 20px 12px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
+.header-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.header h1 { font-size: 1.2em; color: var(--accent); }
+.header .date { font-size: 0.75em; color: var(--text3); margin-top: 2px; }
+.theme-btn { background: var(--bg3); color: var(--text); border: 1px solid var(--border); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75em; }
+.theme-btn:hover { border-color: var(--accent); }
+.tabs { display: flex; gap: 4px; padding: 8px 20px 0; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; white-space: nowrap; scrollbar-width: thin; }
+.tab { padding: 6px 12px; border-radius: 6px 6px 0 0; cursor: pointer; font-size: 0.75em; color: var(--text2); background: transparent; border: 1px solid transparent; border-bottom: none; transition: all 0.15s; }
+.tab:hover { color: var(--accent); background: var(--bg3); }
+.tab.active { color: var(--accent); background: var(--bg); border-color: var(--border); font-weight: 600; }
+.tab-content { display: none; padding: 16px; max-width: 1400px; margin: 0 auto; }
+.tab-content.active { display: block; }
+h2 { font-size: 1.1em; color: var(--accent); margin: 20px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+h3 { font-size: 0.95em; color: var(--text2); margin: 14px 0 8px; }
+.metrics { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 16px; }
+.metric-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; flex: 1; min-width: 120px; text-align: center; }
+.metric-value { font-size: 1.6em; font-weight: 700; color: var(--accent); }
+.metric-label { font-size: 0.72em; color: var(--text2); margin-top: 2px; }
+.metric-sub { font-size: 0.65em; color: var(--text3); }
+.findings { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; margin: 10px 0; }
+.finding-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+.finding-card.p0 { border-left: 3px solid var(--red); }
+.finding-card.p1 { border-left: 3px solid var(--amber); }
+.finding-card.p2 { border-left: 3px solid var(--accent); }
+.finding-card h4 { font-size: 0.85em; margin-bottom: 4px; }
+.finding-card p { font-size: 0.78em; color: var(--text2); line-height: 1.4; }
+.action-table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 0.8em; }
+.action-table th { background: var(--bg3); color: var(--text2); padding: 7px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid var(--border); }
+.action-table td { padding: 7px 10px; border-bottom: 1px solid var(--bg3); }
+.priority-p0 { color: var(--red); font-weight: 700; }
+.priority-p1 { color: var(--amber); font-weight: 700; }
+.priority-p2 { color: var(--accent); font-weight: 700; }
+table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 0.78em; }
+th { background: var(--bg3); color: var(--text2); padding: 7px 8px; text-align: left; font-weight: 600; border-bottom: 2px solid var(--border); white-space: nowrap; }
+td { padding: 6px 8px; border-bottom: 1px solid var(--bg3); }
+tr:hover td { background: rgba(var(--ta), 0.04); }
+.price { font-family: 'SF Mono', Monaco, monospace; text-align: right; white-space: nowrap; }
+.tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 0.72em; font-weight: 600; }
+.tag-new { background: rgba(74, 222, 128, 0.15); color: var(--green); }
+.tag-update { background: rgba(251, 191, 36, 0.15); color: var(--amber); }
+.tag-recall { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+.tag-electric { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+.stock-up { color: var(--green); } .stock-down { color: var(--red); } .stock-flat { color: var(--text3); }
+.card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 10px 0; }
+.info-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+.info-card h4 { font-size: 0.82em; color: var(--text2); margin-bottom: 4px; }
+.info-card .value { font-size: 0.9em; font-weight: 600; color: var(--text); }
+.info-card .sub { font-size: 0.72em; color: var(--text3); margin-top: 2px; }
+.warning-box { background: rgba(248, 113, 113, 0.08); border: 1px solid rgba(248, 113, 113, 0.25); border-radius: 8px; padding: 12px; margin: 10px 0; font-size: 0.78em; }
+.warning-box h4 { color: var(--red); margin-bottom: 4px; }
+footer { text-align: center; color: var(--text3); font-size: 0.7em; padding: 30px 20px 20px; border-top: 1px solid var(--border); margin-top: 20px; }
+.section-note { background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.15); border-radius: 6px; padding: 8px 12px; margin: 8px 0; font-size: 0.72em; color: var(--text2); }
+.score-bar { display: inline-block; height: 6px; border-radius: 3px; background: var(--bg3); vertical-align: middle; margin-right: 6px; }
+.score-fill { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+@media (max-width: 640px) { .header h1 { font-size: 1em; } .tab { font-size: 0.7em; padding: 5px 8px; } .tab-content { padding: 10px; } table { font-size: 0.7em; } th, td { padding: 4px 5px; } }
+</style>
+</head>
+<body>
+<div class="header">
+<div class="header-top">
+<div>
+<h1>🏍️ 全地形车行业战略情报周报</h1>
+<div class="date">20260518 | 报告周期：2026-05-11 ~ 2026-05-18 | EUR/CNY: 7.92</div>
+</div>
+<div><button class="theme-btn" onclick="switchTheme()">🎨 主题</button></div>
+</div>
+</div>
+
+<div class="tabs" id="tabBar">
+<div class="tab active" onclick="switchTab(this,0)">❶ 执行摘要</div>
+<div class="tab" onclick="switchTab(this,1)">❷ 品牌动态</div>
+<div class="tab" onclick="switchTab(this,2)">❸ 产品与价格</div>
+<div class="tab" onclick="switchTab(this,3)">❹ CFMOTO 欧洲</div>
+<div class="tab" onclick="switchTab(this,4)">❺ 渠道网络</div>
+<div class="tab" onclick="switchTab(this,5)">❻ 售后服务</div>
+<div class="tab" onclick="switchTab(this,6)">❼ Segway 建议</div>
+</div>
+
+<!-- ===== TAB 1: 执行摘要 ===== -->
+<div class="tab-content active">
+<h2>❶ 执行摘要</h2>
+<p style="font-size:0.85em;color:var(--text2);margin-bottom:12px;">
+<b>核心结论：</b>本周行业新闻活跃，Polaris 持续公益投入和消防改装布局，Honda 确认 2027 年四轮车续产，CFMOTO 发动机供应新闻引发关注。电动化报道来自 Electrek 但该站本周不可达。Massimo UTV 率先搭载远程 HVAC 预热/预冷值得关注。Segway 暂无重大新闻。
+</p>
+
+<div class="metrics">
+<div class="metric-card"><div class="metric-value">8+</div><div class="metric-label">本周新品/动态数</div><div class="metric-sub">Honda/Kawasaki/CFMOTO/Polaris/Massimo</div></div>
+<div class="metric-card"><div class="metric-value">~11%</div><div class="metric-label">电动化渗透率</div><div class="metric-sub">数据来源：行业基线</div></div>
+<div class="metric-card"><div class="metric-value">Polaris</div><div class="metric-label">重大品牌动态</div><div class="metric-sub">消防Ranger+$125k资助</div></div>
+<div class="metric-card"><div class="metric-value">0 起</div><div class="metric-label">安全召回</div><div class="metric-sub">本周未检测到</div></div>
+</div>
+
+<h3>🔑 本周关键发现</h3>
+<div class="findings">
+<div class="finding-card p0">
+<h4>🔴 CFMOTO 进军摩托车发动机供应市场</h4>
+<p>CFMOTO 与 Regal Raptor 达成协议，为其 DD1000 Sidecar 供应发动机。标志 CFMOTO 从整车制造向动力总成供应商延伸。短期对 ATV/UTV 主业影响有限，但展现技术实力。</p>
+</div>
+<div class="finding-card p1">
+<h4>🟡 Massimo UTV 率先引入远程 HVAC 预调</h4>
+<p>Massimo 将远程启动 HVAC 系统引入 UTV 领域——行业首创。可能成为高端 UTV 差异化标配，Segway 需关注这一趋势。</p>
+</div>
+<div class="finding-card p2">
+<h4>🔵 Polaris 持续公益与政府/防务布局</h4>
+<p>Polaris 消防版 Ranger 面向政府/防务部门；20 年 Trail Grants 追加 $125k 资助。品牌形象建设投入持续。</p>
+</div>
+</div>
+
+<h3>⚡ 立即行动事项</h3>
+<table class="action-table">
+<thead><tr><th>优先级</th><th>行动项</th><th>责任人</th><th>时间</th></tr></thead>
+<tbody>
+<tr><td><span class="priority-p0">P0</span></td><td>监控 CFMOTO 发动机外供策略对 ATV/UTV 主业资源配置影响</td><td>战略情报</td><td>本周</td></tr>
+<tr><td><span class="priority-p1">P1</span></td><td>研究远程 HVAC 预调技术在高端 UTV 的应用趋势</td><td>产品规划</td><td>2 周内</td></tr>
+<tr><td><span class="priority-p1">P1</span></td><td>分析 Honda/Kawasaki 2027 款产品线稳定策略对二手市场影响</td><td>市场分析</td><td>2 周内</td></tr>
+<tr><td><span class="priority-p2">P2</span></td><td>持续监控 Polaris 政府/防务部门动向（消防改装）</td><td>战略情报</td><td>月度</td></tr>
+</tbody>
+</table>
+
+<div class="warning-box">
+<h4>⚠️ 数据盲区声明</h4>
+<p>• 🔴 北美促销/返现政策 - 受限（news.brp.com CDN 403，Google News GFW）</p>
+<p>• 🟡 Electrek.co 电动化新闻 - 本周不可达（超时）</p>
+<p>• 🔴 经销商层级价格战 - 依赖内部渠道，不在公开网站</p>
+<p>• 🟡 BRP 官方新闻室 - CDN 封锁持续，北美促销情报受限</p>
+</div>
+</div>
+
+<!-- ===== TAB 2: 品牌动态 ===== -->
+<div class="tab-content">
+<h2>❷ 品牌动态</h2>
+
+<h3>2.1 核心品牌活动表</h3>
+<table><thead><tr><th>品牌</th><th>事件</th><th>市场/国家</th><th>时间</th><th>影响</th><th>置信度</th></tr></thead>
+<tbody>
+<tr><td><b>CFMOTO</b></td><td>向 Regal Raptor DD1000 Sidecar 供应发动机</td><td>全球</td><td>2026-05-13</td><td>🟡 技术实力展示，主业影响有限</td><td>高</td></tr>
+<tr><td><b>Polaris</b></td><td>消防改装版 Ranger 面向政府/防务部门</td><td>美国</td><td>2026-05-11</td><td>🔵 拓展政府市场新业务线</td><td>高</td></tr>
+<tr><td><b>Polaris</b></td><td>Trail Grants 20周年追加 $125k 资助</td><td>美国</td><td>2026-05-11</td><td>🟢 品牌形象正面</td><td>高</td></tr>
+<tr><td><b>Polaris</b></td><td>"Tough Doesn't Quit" 视频系列前往夏威夷</td><td>全球</td><td>2026-05</td><td>🟢 品牌营销</td><td>高</td></tr>
+<tr><td><b>Honda</b></td><td>FourTrax ATV 全系确认 2027 款续产</td><td>全球</td><td>2026-05</td><td>🔵 产品线稳定，无重大变化</td><td>高</td></tr>
+<tr><td><b>Honda</b></td><td>2026 Pioneer 1000 Deluxe 在 SCM 工厂开始生产</td><td>美国</td><td>2026-05</td><td>🔵 生产线启动</td><td>高</td></tr>
+<tr><td><b>Kawasaki</b></td><td>Mule SX 系列 2027 年重返市场</td><td>全球</td><td>2026-05</td><td>🟢 工作用 UTV 持续供应</td><td>高</td></tr>
+<tr><td><b>Massimo</b></td><td>UTV 远程启动 HVAC 功能（行业首创）</td><td>全球</td><td>2026-05-15</td><td>🟡 差异化竞争新方向</td><td>高</td></tr>
+<tr><td><b>Method</b></td><td>发布 416 UTV 车轮（Bead Grip + Beadlock）</td><td>全球</td><td>2026-05</td><td>🟢 配件生态</td><td>高</td></tr>
+<tr><td><b>Blue Origin</b></td><td>LTV（月球地形车）项目展示</td><td>美国</td><td>2026-05-17</td><td>🟢 行业外关注，技术概念</td><td>高</td></tr>
+</tbody></table>
+
+<h3>2.2 电动化追踪表</h3>
+<table><thead><tr><th>品牌</th><th>电动化产品</th><th>类型</th><th>状态</th><th>功率/续航</th><th>价格</th></tr></thead>
+<tbody>
+<tr><td><b>Segway</b></td><td>Snarler ATV EV / Fugleman UTV EV</td><td>纯电</td><td>在售</td><td>—</td><td>—</td></tr>
+<tr><td><b>CFMOTO</b></td><td>UFORCE U6 EV</td><td>纯电</td><td>在售</td><td>—</td><td>—</td></tr>
+<tr><td><b>Polaris</b></td><td>Ranger EV / RZR EV</td><td>纯电</td><td>在售</td><td>—</td><td>—</td></tr>
+<tr><td><b>Can-Am</b></td><td>Can-Am EV (规划中)</td><td>纯电</td><td>传闻</td><td>—</td><td>—</td></tr>
+<tr><td><b>Massimo</b></td><td>远程 HVAC（非电动化但涉及电动配件）</td><td>功能</td><td>即将</td><td>—</td><td>—</td></tr>
+</tbody></table>
+<p style="font-size:0.7em;color:var(--text3);">注：本周电动化专站(Electrek)不可达，具体新品/续航/价格数据缺失。表中"-"表示本周无更新数据。</p>
+
+<h3>2.3 中国品牌赛道专节</h3>
+<table><thead><tr><th>品牌</th><th>本周动态</th><th>关键定位</th><th>关注点</th></tr></thead>
+<tbody>
+<tr><td><b>CFMOTO</b></td><td>向 Regal Raptor 供应发动机</td><td>技术输出</td><td>发动机外供策略影响资源配置</td></tr>
+<tr><td><b>GOES</b></td><td>暂无本周动态</td><td>性价比+长质保</td><td>德/奥 4年质保领先</td></tr>
+<tr><td><b>Linhai</b></td><td>暂无本周动态</td><td>北美 TITAL 运营</td><td>分销权变更影响</td></tr>
+<tr><td><b>Loncin</b></td><td>暂无本周动态</td><td>中国背景</td><td>国际化扩张</td></tr>
+<tr><td><b>QJMOTOR</b></td><td>暂无本周动态</td><td>中国背景</td><td>国际化扩张</td></tr>
+<tr><td><b>Aodes</b></td><td>暂无本周动态</td><td>中国背景</td><td>国际化扩张</td></tr>
+<tr><td><b>Benda</b></td><td>暂无本周动态</td><td>中国背景</td><td>国际化扩张</td></tr>
+<tr><td><b>DRAXON</b></td><td>暂无本周动态</td><td>中国品牌</td><td>欧洲市场拓展</td></tr>
+<tr><td><b>MerryMover</b></td><td>暂无本周动态</td><td>中国品牌</td><td>欧洲市场拓展</td></tr>
+</tbody></table>
+</div>
+
+<!-- ===== TAB 3: 产品与价格 ===== -->
+<div class="tab-content">
+<h2>❸ 产品与价格</h2>
+
+<h3>3.1 本周新品发布</h3>
+<table><thead><tr><th>品牌</th><th>型号</th><th>核心参数</th><th>时间</th><th>MSRP</th><th>类型</th></tr></thead>
+<tbody>
+<tr><td><b>Honda</b></td><td>FourTrax 2027 全系</td><td>Recon/Rancher/Foreman/Rubicon 续产</td><td>2026-05</td><td>待确认</td><td>ATV 续产</td></tr>
+<tr><td><b>Honda</b></td><td>Pioneer 1000 Deluxe 2026</td><td>SCM 工厂开始生产</td><td>2026-05</td><td>待确认</td><td>UTV 量产</td></tr>
+<tr><td><b>Kawasaki</b></td><td>Mule SX 2027</td><td>多个配置版本</td><td>2026-05</td><td>待确认</td><td>UTV 续产</td></tr>
+<tr><td><b>Polaris</b></td><td>XD Firefighting Skid</td><td>消防版 Ranger 改装</td><td>2026-05</td><td>待确认</td><td>改装/政府</td></tr>
+<tr><td><b>Massimo</b></td><td>远程 HVAC 预装 UTV</td><td>行业首创远程空调预热/预冷</td><td>即将</td><td>待确认</td><td>功能升级</td></tr>
+<tr><td><b>CFMOTO</b></td><td>DD1000 Sidecar 发动机供应</td><td>发动机供应给 Regal Raptor</td><td>2026-05-13</td><td>—</td><td>发动机供应</td></tr>
+</tbody></table>
+<p style="font-size:0.7em;color:var(--text3);">注：多家品牌新品 MSRP 未在公开新闻中披露。北美促销情报受限。</p>
+
+<h3>3.2 高端 SxS 价格对标</h3>
+<table><thead><tr><th>型号</th><th>功率(HP)</th><th>核心配置</th><th>MSRP(USD)</th><th>性价比 HP/$K</th></tr></thead>
+<tbody>
+<tr><td><b>Polaris RZR Pro R</b></td><td>225</td><td>Turbo, 64" 宽</td><td>$38,999</td><td>5.77</td></tr>
+<tr><td><b>Can-Am Maverick R</b></td><td>240</td><td>Turbo RR, 64"</td><td>$40,999</td><td>5.85</td></tr>
+<tr><td><b>CFMOTO ZFORCE 950</b></td><td>~87</td><td>950cc, Sport</td><td>~$14,999</td><td>5.80</td></tr>
+<tr><td><b>Segway Super Villain SX20</b></td><td>205</td><td>Turbo, 64"</td><td>$31,999</td><td>6.41</td></tr>
+<tr><td><b>Segway Super Villain SX20T</b></td><td>220</td><td>Turbo, 72"</td><td>~$39,999</td><td>5.50</td></tr>
+</tbody></table>
+
+<h3>3.3 Segway 全产品线价格矩阵</h3>
+<table><thead><tr><th>型号</th><th>类型</th><th>功率</th><th>宽度</th><th>MSRP</th><th>质保</th></tr></thead>
+<tbody>
+<tr><td><b>Super Villain SX20</b></td><td>Sport SxS</td><td>205HP Turbo</td><td>64"</td><td>$31,999</td><td>2年</td></tr>
+<tr><td><b>Super Villain SX20T</b></td><td>Sport SxS</td><td>220HP Turbo</td><td>72"</td><td>$39,999</td><td>2年*</td></tr>
+<tr><td><b>Fugleman RT3</b></td><td>UTV</td><td>100HP EV</td><td>—</td><td>$21,999</td><td>2年</td></tr>
+<tr><td><b>Fugleman RT5</b></td><td>UTV 5座</td><td>114HP</td><td>—</td><td>$26,999</td><td>2年</td></tr>
+<tr><td><b>Fugleman RT5 EV</b></td><td>UTV 5座 EV</td><td>100HP EV</td><td>—</td><td>$25,999</td><td>2年</td></tr>
+<tr><td><b>Snarler AT5 DCT</b></td><td>ATV</td><td>114HP</td><td>—</td><td>$14,999</td><td>2年</td></tr>
+<tr><td><b>Snarler AT5 EV</b></td><td>ATV EV</td><td>EV</td><td>—</td><td>—</td><td>2年</td></tr>
+<tr><td><b>Snarler AT1</b></td><td>ATV</td><td>50HP</td><td>—</td><td>$6,499</td><td>2年</td></tr>
+</tbody></table>
+<p style="font-size:0.7em;color:var(--text3);">*SX20T 不享受延保服务。数据来源：FACT.md 基线</p>
+</div>
+
+<!-- ===== TAB 4: CFMOTO 欧洲 ===== -->
+<div class="tab-content">
+<h2>❹ CFMOTO 欧洲四轮车分析</h2>
+<p style="font-size:0.78em;color:var(--text2);margin-bottom:10px;">数据采集：Camoufox 抓取 | 平台: Amazon.de (51条) + eBay Kleinanzeigen (12条) | EUR/CNY = 7.92</p>
+
+<div class="metrics">
+<div class="metric-card"><div class="metric-value">63</div><div class="metric-label">有效上架数</div></div>
+<div class="metric-card"><div class="metric-value">19</div><div class="metric-label">覆盖车型数</div></div>
+<div class="metric-card"><div class="metric-value">Amazon.de</div><div class="metric-label">价格最低/活跃平台</div></div>
+<div class="metric-card"><div class="metric-value">2</div><div class="metric-label">活跃平台数</div></div>
+</div>
+
+<div class="warning-box">
+<h4>⚠️ 数据说明</h4>
+<p>• OffroadMarket.eu 超时（networkidle 45s）</p>
+<p>• Motobene.de SSL 错误不可达</p>
+<p>• 多数上架为配件/维修件，非整车销售——反映 CFMOTO 欧洲第三方配件生态活跃</p>
+<p>• eBay Kleinanzeigen 12 条有效(CFORCE 450/625/850, UFORCE 1000, ZFORCE 1000)</p>
+</div>
+
+<h3>4.1 平台 × 车型 价格矩阵（代表性上架）</h3>
+<table><thead><tr><th>平台</th><th>车型</th><th>EUR 参考价</th><th>RMB 参考价</th><th>评分</th><th>库存</th></tr></thead>
+<tbody>
+<tr><td>Amazon.de</td><td>CFORCE 625 减震套件</td><td class="price">€190.11</td><td class="price">¥1,506</td><td>—</td><td>✅</td></tr>
+<tr><td>Amazon.de</td><td>CFORCE 850 燃油泵</td><td class="price">€74.00</td><td class="price">¥586</td><td>—</td><td>✅</td></tr>
+<tr><td>Amazon.de</td><td>UFORCE 800 启动马达</td><td class="price">€84.48</td><td class="price">¥669</td><td>—</td><td>✅</td></tr>
+<tr><td>Amazon.de</td><td>ZFORCE 950 传动皮带</td><td class="price">€60.79</td><td class="price">¥481</td><td>—</td><td>✅</td></tr>
+<tr><td>Amazon.de</td><td>UTV 防护罩 (ZFORCE/UFORCE)</td><td class="price">€48.36</td><td class="price">¥383</td><td>—</td><td>✅</td></tr>
+<tr><td>Amazon.de</td><td>CFORCE 625 减震(2款)</td><td class="price">€242.57</td><td class="price">¥1,921</td><td>—</td><td>✅</td></tr>
+<tr><td>Amazon.de</td><td>CFORCE 800 启动马达</td><td class="price">€206.36</td><td class="price">¥1,634</td><td>—</td><td>✅</td></tr>
+<tr><td>eBay Kleinanzeigen</td><td>CFORCE 450</td><td class="price">—</td><td>—</td><td>—</td><td>✅</td></tr>
+<tr><td>eBay Kleinanzeigen</td><td>CFORCE 625</td><td class="price">—</td><td>—</td><td>—</td><td>✅</td></tr>
+<tr><td>eBay Kleinanzeigen</td><td>CFORCE 850</td><td class="price">—</td><td>—</td><td>—</td><td>✅</td></tr>
+<tr><td>eBay Kleinanzeigen</td><td>UFORCE 1000</td><td class="price">—</td><td>—</td><td>—</td><td>✅</td></tr>
+<tr><td>eBay Kleinanzeigen</td><td>ZFORCE 1000</td><td class="price">—</td><td>—</td><td>—</td><td>✅</td></tr>
+</tbody></table>
+
+<h3>4.2 车型汇总统计</h3>
+<table><thead><tr><th>车型</th><th>上架数</th><th>主要平台</th></tr></thead>
+<tbody><tr><td><b>CFORCE 550</b></td><td>8</td><td>Amazon.de</td></tr>
+<tr><td><b>ZFORCE 500</b></td><td>7</td><td>Amazon.de</td></tr>
+<tr><td><b>CFORCE 625</b></td><td>6</td><td>Amazon.de</td></tr>
+<tr><td><b>CFORCE 400</b></td><td>6</td><td>Amazon.de</td></tr>
+<tr><td><b>ZFORCE 950</b></td><td>5</td><td>Amazon.de</td></tr>
+<tr><td><b>UFORCE 800</b></td><td>4</td><td>Amazon.de</td></tr>
+<tr><td><b>CFORCE 850</b></td><td>4</td><td>Amazon.de</td></tr>
+<tr><td><b>CFORCE 450</b></td><td>3</td><td>Amazon.de</td></tr>
+<tr><td><b>CFORCE 500</b></td><td>3</td><td>Amazon.de</td></tr>
+<tr><td><b>UFORCE 1000</b></td><td>3</td><td>Amazon.de/eBay</td></tr>
+<tr><td><b>ZFORCE 1000</b></td><td>3</td><td>Amazon.de/eBay</td></tr>
+<tr><td><b>CFORCE 820</b></td><td>2</td><td>Amazon.de</td></tr>
+<tr><td><b>UFORCE 450</b></td><td>2</td><td>Amazon.de</td></tr>
+<tr><td><b>UFORCE 500</b></td><td>2</td><td>Amazon.de</td></tr>
+<tr><td><b>CFORCE 520</b></td><td>1</td><td>Amazon.de</td></tr>
+<tr><td><b>CFORCE 800</b></td><td>1</td><td>Amazon.de</td></tr>
+<tr><td><b>UFORCE1000</b></td><td>1</td><td>Amazon.de</td></tr>
+<tr><td><b>GLADIATOR X625</b></td><td>1</td><td>Amazon.de</td></tr>
+<tr><td><b>CFORCE 600</b></td><td>1</td><td>Amazon.de</td></tr>
+</tbody></table>
+
+<h3>4.3 评价高频词</h3>
+<div class="card-container">
+<div class="info-card"><h4>⚡ 动力相关</h4><div class="value"><span class="tag tag-new">leistung(46)</span> <span class="tag tag-new">motor(29)</span> <span class="tag tag-new">power(18)</span> <span class="tag">kw(12)</span> <span class="tag">ps(8)</span></div></div>
+<div class="info-card"><h4>⛽ 续航/消耗相关</h4><div class="value"><span class="tag">verbrauch(12)</span> <span class="tag">kraftstoff(8)</span> <span class="tag">benzin(5)</span> <span class="tag">fuel(3)</span></div></div>
+</div>
+
+<h3>4.4 人民币参考价</h3>
+<table><thead><tr><th>指标</th><th>值</th></tr></thead>
+<tbody>
+<tr><td>当日 EUR/CNY 汇率</td><td><b>{eur_cny_rate}</b></td></tr>
+<tr><td>最高 EUR 单品</td><td class="price">€242.57 (= ¥{242.57*eur_cny_rate:.0f})</td></tr>
+<tr><td>最低 EUR 有价单品</td><td class="price">€48.36 (= ¥{48.36*eur_cny_rate:.0f})</td></tr>
+</tbody></table>
+</div>
+
+<!-- ===== TAB 5: 渠道网络 ===== -->
+<div class="tab-content">
+<h2>❺ 渠道网络</h2>
+
+<h3>5.1 经销商网络统计</h3>
+<table><thead><tr><th>排名</th><th>品牌</th><th>总计</th><th>德国</th><th>法国</th><th>捷克</th><th>波兰</th><th>俄罗斯</th><th>美国</th><th>加拿大</th><th>葡萄牙</th><th>澳大利亚</th><th>环比</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><b>Polaris</b></td><td>~2,126</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>1,126</td><td>200</td><td>—</td><td>—</td><td>→</td></tr>
+<tr><td>2</td><td><b>Can-Am</b></td><td>~1,669</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>889</td><td>180</td><td>—</td><td>—</td><td>→</td></tr>
+<tr><td>3</td><td><b>Segway</b></td><td>863</td><td>87</td><td>156</td><td>101</td><td>65</td><td>95</td><td>200</td><td>32</td><td>65</td><td>62</td><td>→</td></tr>
+<tr><td>4</td><td><b>CFMOTO</b></td><td>~900</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>350</td><td>50</td><td>—</td><td>—</td><td>→</td></tr>
+<tr><td>5</td><td><b>GOES</b></td><td>~380</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>80</td><td>—</td><td>—</td><td>—</td><td>→</td></tr>
+<tr><td>6</td><td><b>Linhai</b></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>→</td></tr>
+<tr><td>7</td><td><b>Loncin</b></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>→</td></tr>
+<tr><td>8</td><td><b>QJMOTOR</b></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>→</td></tr>
+<tr><td>9</td><td><b>Aodes</b></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>→</td></tr>
+<tr><td>10</td><td><b>Benda</b></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>→</td></tr>
+</tbody></table>
+<p style="font-size:0.7em;color:var(--text3);">"—" 表示该市场数据暂未收录。Segway 数据为 2026-04-28 确认。竞品数据为参考估算值。</p>
+
+<h3>5.2 渠道政策与返利体系</h3>
+<table><thead><tr><th>品牌</th><th>渠道政策亮点</th><th>返利/支持力度</th></tr></thead>
+<tbody>
+<tr><td><b>Segway</b></td><td>9市场863家，美国200家，欧洲密集覆盖</td><td>标准经销商返利</td></tr>
+<tr><td><b>CFMOTO</b></td><td>欧洲500+快速增长，美国~350</td><td>低价策略+高返点%</td></tr>
+<tr><td><b>GOES</b></td><td>东欧为主(~300)，美国~80</td><td>长质保(4年)作为渠道卖点</td></tr>
+<tr><td><b>Polaris</b></td><td>全球最大经销商网络</td><td>成熟返利体系，预估3-5%</td></tr>
+<tr><td><b>Can-Am</b></td><td>BRP 网络，独立+多品牌</td><td>成熟返利体系，预估3-5%</td></tr>
+<tr><td><b>Linhai</b></td><td>TITAL 运营，分销权变动中</td><td>待确认</td></tr>
+<tr><td><b>Loncin</b></td><td>国际化扩张初期</td><td>待确认</td></tr>
+<tr><td><b>QJMOTOR</b></td><td>国际化扩张初期</td><td>待确认</td></tr>
+<tr><td><b>Aodes</b></td><td>欧洲布局</td><td>待确认</td></tr>
+<tr><td><b>Benda</b></td><td>欧洲布局初期</td><td>待确认</td></tr>
+</tbody></table>
+</div>
+
+<!-- ===== TAB 6: 售后服务 ===== -->
+<div class="tab-content">
+<h2>❻ 售后服务</h2>
+
+<h3>6.1 质保政策对比（7品牌）</h3>
+<table><thead><tr><th>维度</th><th>Segway</th><th>GOES</th><th>CFMOTO</th><th>Can-Am</th><th>Polaris</th><th>Linhai</th><th>QJMOTOR</th></tr></thead>
+<tbody>
+<tr><td><b>整车质保</b></td><td>2年不限里程</td><td>4年/25,000km(德/奥)<br>2年(法国/Benelux)<br>5年/3年(捷克)</td><td>2年(欧)<br>1年(非欧)</td><td>待确认</td><td>6月有限+可选延保</td><td>待确认</td><td>待确认</td></tr>
+<tr><td><b>零部件质保</b></td><td>1年不限里程</td><td>按市场差异</td><td>1年(非2年)</td><td>待确认</td><td>6月有限</td><td>待确认</td><td>待确认</td></tr>
+<tr><td><b>延保选项</b></td><td>1-3年免费<br>(不含SX20T)</td><td>待确认</td><td>1-3年客户付费</td><td>待确认</td><td>促销可延2-5年</td><td>待确认</td><td>待确认</td></tr>
+<tr><td><b>工时覆盖</b></td><td>含在整车质保</td><td>含(德/奥)<br>1年(法国)</td><td>部件+工时(欧)</td><td>待确认</td><td>6月有限</td><td>待确认</td><td>待确认</td></tr>
+<tr><td><b>商用覆盖</b></td><td>90天商用</td><td>排除商用</td><td>待确认</td><td>待确认</td><td>待确认</td><td>待确认</td><td>待确认</td></tr>
+</tbody></table>
+
+<h3>6.2 售后竞争力综合评分（9品牌×8维度）</h3>
+<table><thead><tr><th>维度（权重）</th><th>Segway</th><th>GOES</th><th>CFMOTO</th><th>Can-Am</th><th>Polaris</th><th>Linhai</th><th>QJMOTOR</th><th>Loncin</th><th>Tao Motor</th></tr></thead>
+<tbody>
+<tr><td><b>质保政策(20%)</b></td><td>8</td><td>9</td><td>6</td><td>7</td><td>5</td><td>5</td><td>4</td><td>4</td><td>3</td></tr>
+<tr><td><b>零部件供应(20%)</b></td><td>7</td><td>6</td><td>7</td><td>8</td><td>8</td><td>5</td><td>4</td><td>4</td><td>3</td></tr>
+<tr><td><b>附件品类(15%)</b></td><td>7</td><td>5</td><td>6</td><td>8</td><td>8</td><td>5</td><td>3</td><td>3</td><td>2</td></tr>
+<tr><td><b>代理商服务(15%)</b></td><td>7</td><td>6</td><td>6</td><td>8</td><td>9</td><td>5</td><td>4</td><td>4</td><td>2</td></tr>
+<tr><td><b>培训覆盖(10%)</b></td><td>6</td><td>5</td><td>5</td><td>7</td><td>8</td><td>4</td><td>3</td><td>3</td><td>2</td></tr>
+<tr><td><b>维修材料(10%)</b></td><td>6</td><td>5</td><td>5</td><td>7</td><td>7</td><td>4</td><td>3</td><td>3</td><td>2</td></tr>
+<tr><td><b>用户直连(5%)</b></td><td>8</td><td>4</td><td>5</td><td>7</td><td>7</td><td>3</td><td>2</td><td>2</td><td>1</td></tr>
+<tr><td><b>索赔申请(5%)</b></td><td>7</td><td>6</td><td>6</td><td>7</td><td>7</td><td>5</td><td>4</td><td>4</td><td>3</td></tr>
+<tr><td><b>综合分</b></td><td><b>7.05</b></td><td><b>5.95</b></td><td><b>5.85</b></td><td><b>7.45</b></td><td><b>7.35</b></td><td><b>4.55</b></td><td><b>3.45</b></td><td><b>3.45</b></td><td><b>2.35</b></td></tr>
+</tbody></table>
+<p style="font-size:0.7em;color:var(--text3);">评分范围 1-10，权重见 FACT.md。Segway 综合分 7.05，排名第三（Can-Am 7.45 > Polaris 7.35 > Segway 7.05）。</p>
+
+<h3>6.3 品牌 APP 功能对比</h3>
+<table><thead><tr><th>功能维度</th><th>Segway</th><th>Polaris</th><th>Can-Am</th><th>CFMOTO</th><th>GOES</th></tr></thead>
+<tbody>
+<tr><td><b>远程监控</b></td><td>✅ T-BOX OTA</td><td>✅ Ride Command</td><td>✅ BRP Go!</td><td>✅ CFMOTO APP</td><td>❌</td></tr>
+<tr><td><b>车辆定位/防盗</b></td><td>✅</td><td>✅</td><td>✅</td><td>⚠️ 部分</td><td>❌</td></tr>
+<tr><td><b>行程记录</b></td><td>✅</td><td>✅ 详细</td><td>✅ 详细</td><td>⚠️ 基础</td><td>❌</td></tr>
+<tr><td><b>OTA 升级</b></td><td>⚠️ 仅 T-BOX</td><td>✅ 部分</td><td>✅</td><td>⚠️ 部分</td><td>❌</td></tr>
+<tr><td><b>经销商查询</b></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>⚠️ 网站</td></tr>
+</tbody></table>
+<p style="font-size:0.7em;color:var(--text3);">注：Segway OTA 仅限 T-BOX 软件，非整车 OTA。Can-Am BRP Go! 和 Polaris Ride Command 是行业标杆。</p>
+</div>
+
+<!-- ===== TAB 7: Segway 建议 ===== -->
+<div class="tab-content">
+<h2>❼ Segway 建议</h2>
+
+<h3>7.1 市场定位与竞争格局</h3>
+<div class="findings">
+<div class="finding-card p0">
+<h4>🔴 Segway 当前定位</h4>
+<p><b>优势：</b>全产品线（SxS/UTV/ATV/EV）、免费延保、全系 2 年整车质保、OTA 基础能力、9 市场 863 家经销商。<br>
+<b>挑战：</b>北美经销商密度(200)远低于 Polaris(1,126) 和 Can-Am(889)；质保政策全面但 SX20T 延保缺失；非整车 OTA。</p>
+</div>
+<div class="finding-card p1">
+<h4>🟡 竞品动态影响</h4>
+<p><b>CFMOTO：</b>发动机外供策略展示技术实力，可能间接提升品牌溢价能力。<br>
+<b>Massimo：</b>远程 HVAC 功能创新——UTV 舒适性配置升级趋势。<br>
+<b>Polaris：</b>政府/防务部门扩张，消防改装 Ranger 开辟新渠道。</p>
+</div>
+<div class="finding-card p2">
+<h4>🔵 安全召回间接利好</h4>
+<p>本周未检测到任何品牌安全召回。行业召回处于低水平周期，短期内召回事件驱动效应弱。</p>
+</div>
+</div>
+
+<h3>7.2 行动优先级表</h3>
+<table class="action-table"><thead><tr><th>优先级</th><th>行动项</th><th>预期效果</th><th>时间窗口</th></tr></thead>
+<tbody>
+<tr><td><span class="priority-p0">P0</span></td><td>评估远程 HVAC 功能上车可行性（对标 Massimo 首发）</td><td>保持高端 UTV 配置竞争力</td><td>1-2 月</td></tr>
+<tr><td><span class="priority-p0">P0</span></td><td>加速北美经销商网络扩张（重点对标 Polaris 密度）</td><td>提升北美市场可达性</td><td>6-12 月</td></tr>
+<tr><td><span class="priority-p1">P1</span></td><td>评估整车 OTA 技术路线图（当前仅 T-BOX）</td><td>缩小与 Can-Am/Polaris 差距</td><td>3-6 月</td></tr>
+<tr><td><span class="priority-p1">P1</span></td><td>监控 CFMOTO 发动机外供策略是否转向 ATV/UTV 竞争</td><td>提前预警竞争格局变化</td><td>持续</td></tr>
+<tr><td><span class="priority-p2">P2</span></td><td>SX20T 延保覆盖评估（当前延保不覆盖）</td><td>消除旗舰产品售后盲区</td><td>3 月</td></tr>
+<tr><td><span class="priority-p2">P2</span></td><td>行业创新报告：远程 HVAC / UTV 舒适化趋势月度跟踪</td><td>保持产品创新敏感度</td><td>月度</td></tr>
+</tbody></table>
+
+<h3>7.3 风险预警</h3>
+<table><thead><tr><th>风险项</th><th>时间范围</th><th>概率</th><th>影响</th><th>应对建议</th></tr></thead>
+<tbody>
+<tr><td><b>CFMOTO 发动机外供提升品牌认可度→ATV/UTV 领域竞争加剧</b></td><td>短期 1-3月</td><td>中</td><td>中</td><td>密切监控 CFMOTO 品牌认知度变化</td></tr>
+<tr><td><b>北美促销情报受限→定价策略盲区</b></td><td>短期 1-3月</td><td>高</td><td>中</td><td>依赖 dealer 一手情报补位</td></tr>
+<tr><td><b>远程 HVAC 功能成高端 UTV 标配趋势</b></td><td>中期 3-12月</td><td>中</td><td>高</td><td>加速产品规划响应</td></tr>
+<tr><td><b>电动化渗透率低于预期→EV 产品线 ROI 风险</b></td><td>中期 3-12月</td><td>中</td><td>高</td><td>阶段性评估 EV 产能/定价</td></tr>
+<tr><td><b>BRP/Polaris 经销商返现力度加大</b></td><td>中期 3-12月</td><td>中</td><td>高</td><td>无法通过公开源获取，需 dealer 网络反馈</td></tr>
+<tr><td><b>Super Villain SX20 Hybrid 项目取消已确认，无需担忧</b></td><td>—</td><td>—</td><td>—</td><td>维持已确认信息</td></tr>
+</tbody></table>
+
+<h3>7.4 数据盲区与处理原则</h3>
+<div class="warning-box">
+<p>• 🔴 北美促销/返现政策：BRP 新闻室(CDN 403)、Google News(GFW) 均不可达，经销商内部信息为核心来源</p>
+<p>• 🟡 电动化新闻：Electrek.co 本周不可达(超时)，电动化新品信息缺失</p>
+<p>• 🔴 经销商层级价格战：不公开网上披露</p>
+<p>• 🟢 ATV.com 作为主力新闻源，已覆盖 Polaris/CFMOTO/Honda/Kawasaki/Massimo 动态</p>
+</div>
+</div>
+
+<footer>
+<p>赛思战略情报部 | 全地形车行业战略情报周报 | {today}</p>
+<p>数据来源：ATV.com / Amazon.de / eBay Kleinanzeigen / FACT.md 基线 | 生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M')}</p>
+<p style="margin-top:4px;color:var(--text3);font-size:0.85em;">⚠️ 机密文件 · 仅限指定接收人 · 不得转发</p>
+</footer>
+
+<script>
+// Tab switching
+function switchTab(el, idx) {{
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.tab-content')[idx].classList.add('active');
+}}
+
+// Theme switching
+const themes = ['navy', 'frost', 'amber', 'warm', 'graphite'];
+function switchTheme() {{
+    let current = document.body.dataset.theme || 'navy';
+    let idx = themes.indexOf(current);
+    let next = themes[(idx + 1) % themes.length];
+    document.body.dataset.theme = next;
+    localStorage.setItem('atv-theme', next);
+}}
+
+// Restore saved theme
+(function() {{
+    let saved = localStorage.getItem('atv-theme');
+    if (saved) document.body.dataset.theme = saved;
+}})();
+</script>
+</body>
+</html>
