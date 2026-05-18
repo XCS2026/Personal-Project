@@ -52,7 +52,7 @@ body.warm .tc{color:#d4c8b4}body.warm .tc2{color:#e8dcc8}
   <button onclick="setTheme('warm')" style="width:22px;height:22px;border-radius:50%;border:2px solid rgba(160,130,80,.3);background:#1c1812;cursor:pointer" title="暖色"></button>
   <button onclick="setTheme('light')" style="width:22px;height:22px;border-radius:50%;border:2px solid rgba(60,120,240,.3);background:#f0f4fe;cursor:pointer" title="浅色"></button>
   <span style="width:1px;height:22px;background:rgba(60,80,120,0.15);margin:0 3px"></span>
-  <button onclick="checkUpdate()" style="padding:0 7px;height:22px;border-radius:5px;border:1px solid rgba(60,120,240,0.3);background:rgba(90,172,255,0.1);color:#5aacff;cursor:pointer;font-size:10px;font-family:inherit;white-space:nowrap">🔄 更新</button>
+  <button onclick="checkUpdate()" id="checkUpdateBtn" style="padding:0 7px;height:22px;border-radius:5px;border:1px solid rgba(60,120,240,0.3);background:rgba(90,172,255,0.1);color:#5aacff;cursor:pointer;font-size:10px;font-family:inherit;white-space:nowrap">🔄 更新</button>
 </div>
 
 <div class="bc" style="display:flex;gap:12px;flex-wrap:wrap;margin:16px 0 20px;padding:14px 20px;border-radius:12px" id="kpi">
@@ -112,20 +112,26 @@ body.warm .tc{color:#d4c8b4}body.warm .tc2{color:#e8dcc8}
 
 <script>
 var VERSION = '20250515.2';
-var UPDATE_URL = 'https://raw.githubusercontent.com/XCS2026/sps-cost-model/main/sps-cost-model_latest.html';
+var RAW_URL = 'https://raw.githubusercontent.com/XCS2026/Personal-Project/main/sps-cost-model_latest.html';
+var PAGES_URL = 'https://XCS2026.github.io/Personal-Project/sps-cost-model_latest.html';
 function checkUpdate() {
-  var btn = document.querySelector('.tsw button:last-child');
-  fetch(UPDATE_URL + '?t=' + Date.now()).then(function(r) { return r.text(); }).then(function(html) {
-    var m = html.match(/var VERSION = ['\u0022](\d+\.\d+)['\u0022]/);
+  var btn = document.getElementById('checkUpdateBtn');
+  if (!btn) return;
+  btn.textContent = '⏳ 检查中...';
+  fetch(RAW_URL + '?t=' + Date.now()).then(function(r) { return r.text(); }).then(function(html) {
+    var m = html.match(/var VERSION = ['"](\d+\.\d+)['"]/);
     if (!m) { throw new Error('version not found'); }
     var rv = m[1];
-    if (rv === VERSION) { btn.textContent = '\u2705 已是最新'; btn.style.color = '#30d0a0'; }
-    else if (rv > VERSION) { btn.textContent = '\uD83D\uDCE5 新版本可用'; btn.style.color = '#f0c040';
-      btn.onclick = function(){ window.location.href = UPDATE_URL; }; }
-    else { btn.textContent = '\u26A0\uFE0F 版本异常'; btn.style.color = '#e06060'; }
-    setTimeout(function(){ btn.textContent = '\uD83D\uDD04 更新'; btn.style.color = '#5aacff'; btn.onclick = null; }, 5000);
-  }).catch(function(){ btn.textContent = '\u274C 检查失败'; btn.style.color = '#e06060';
-    setTimeout(function(){ btn.textContent = '\uD83D\uDD04 更新'; btn.style.color = '#5aacff'; }, 3000); });
+    if (rv === VERSION) { btn.textContent = '✅ 已是最新'; btn.style.color = '#30d0a0'; }
+    else if (rv > VERSION) { btn.textContent = '📥 新版本可用'; btn.style.color = '#f0c040';
+      btn.onclick = function(){ window.open(PAGES_URL); }; }
+    else { btn.textContent = '⚠️ 版本异常'; btn.style.color = '#e06060'; }
+    setTimeout(function(){ btn.textContent = '🔄 更新'; btn.style.color = '#5aacff'; btn.onclick = null; }, 6000);
+  }).catch(function(e){
+    btn.textContent = '❌ 检查失败';
+    btn.style.color = '#e06060';
+    setTimeout(function(){ btn.textContent = '🔄 更新'; btn.style.color = '#5aacff'; }, 3000);
+  });
 }
 
 // ===== DYNAMIC DATA =====
