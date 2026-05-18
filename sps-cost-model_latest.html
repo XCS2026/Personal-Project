@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SPS全地形车德国仓 · Yusen-DE成本模型</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Noto Sans SC,Inter,sans-serif;margin:0;padding:20px 24px 40px;max-width:1420px;margin:0 auto;transition:background .4s,color .4s}
+body.dark{background:#0a0e18;color:#e0e8f4}
+body.dark .h1c{color:#f0f4ff}body.dark .h3c{color:#e4ecfc}
+body.dark .mc{color:#8899bb}body.dark .mc2{color:#6a7a9a}
+body.dark .bc{background:rgba(16,26,48,.78);border:1px solid rgba(60,100,170,.22)}
+body.dark .tc{color:#e0e8f4}body.dark .tc2{color:#f0f4ff}
+body.light{background:#f0f4fe;color:#1a2848}
+body.light .h1c{color:#081838}body.light .h3c{color:#142848}
+body.light .mc{color:#4a6080}body.light .mc2{color:#5a6a8a}
+body.light .bc{background:rgba(255,255,255,.94);border:1px solid rgba(160,185,225,.4)}
+body.light .tc{color:#1a2848}body.light .tc2{color:#081838}
+body.warm{background:#1c1812;color:#d4c8b4}
+body.warm .h1c{color:#e8dcc8}body.warm .h3c{color:#ddd0b8}
+body.warm .mc{color:#9a8a74}body.warm .mc2{color:#8a7a64}
+body.warm .bc{background:rgba(36,28,18,.82);border:1px solid rgba(160,130,80,.25)}
+body.warm .tc{color:#d4c8b4}body.warm .tc2{color:#e8dcc8}
+.anim-fade{opacity:0;transform:translateY(20px)}
+.anim-pop{opacity:0;transform:scale(0.92)}
+.anim-left{opacity:0;transform:translateX(-20px)}
+</style>
+</head>
+<body class="dark">
+<div style="text-align:center;padding:30px 20px 10px">
+<div style="display:inline-block;padding:4px 14px;border-radius:16px;background:rgba(74,140,255,.15);border:1px solid rgba(74,140,255,.35);font-size:12px;color:#5aacff;margin-bottom:12px;font-weight:500">🏎️ SPS全地形车 · 德国备件仓</div>
+<h1 class="h1c anim-fade" style="font-size:34px;font-weight:800;margin:0 0 6px">SPS常州<span style="background:linear-gradient(135deg,#5aacff,#30d0a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent">→德国汉堡</span>Yusen-DE成本模型</h1>
+<p class="mc anim-fade" style="font-size:14px;margin:0 0 4px">SPS（九号集团·常州全地形车）→ Yusen-DE（Sittensen，距汉堡60km）→ 欧洲代理商</p>
+<div class="mc2 anim-fade" style="font-size:11px">数据源：SPS E2E Cost Simulation 0512-FY27 | FY27: 146,698件 | 27×40HQ柜/年 | 平均5.76kg/件</div>
+</div>
+
+<div style="display:flex;align-items:stretch;justify-content:center;gap:12px;margin:16px auto 24px;max-width:900px;padding:0 8px;flex-wrap:wrap">
+<div style="flex:1;padding:12px 10px;border-radius:10px;text-align:center;border:1px solid rgba(255,107,107,0.3);background:rgba(255,107,107,0.06);min-width:110px"><div style="font-size:24px;margin-bottom:4px">🏭</div><div style="font-size:13px;font-weight:700;color:#e06060">SPS（中国常州）</div><div style="font-size:10px;color:#6a7a9a;line-height:1.3">制造+出口</div></div>
+<div style="flex:0 0 auto;display:flex;align-items:center;color:#8899bb;font-size:16px;padding:0 2px">→</div>
+<div style="flex:1;padding:12px 10px;border-radius:10px;text-align:center;border:1px solid rgba(90,172,255,0.3);background:rgba(90,172,255,0.06);min-width:110px"><div style="font-size:24px;margin-bottom:4px">🇩🇪</div><div style="font-size:13px;font-weight:700;color:#5aacff">B公司（汉堡Yusen-DE）</div><div style="font-size:10px;color:#6a7a9a;line-height:1.3">清关→仓储→拣货→对接3PL</div></div>
+<div style="flex:0 0 auto;display:flex;align-items:center;color:#8899bb;font-size:16px;padding:0 2px">→</div>
+<div style="flex:1;padding:12px 10px;border-radius:10px;text-align:center;border:1px solid rgba(240,192,64,0.3);background:rgba(240,192,64,0.04);min-width:110px"><div style="font-size:24px;margin-bottom:4px">🤝</div><div style="font-size:13px;font-weight:700;color:#f0c040">欧洲各国代理商</div><div style="font-size:10px;color:#6a7a9a;line-height:1.3">下单采购 · 承担3PL运费</div></div>
+<div style="flex:0 0 auto;display:flex;align-items:center;padding:0 2px;writing-mode:vertical-lr;text-orientation:mixed;color:#8899bb;font-size:11px;letter-spacing:2px">┃运费直付</div>
+<div style="flex:1;padding:12px 10px;border-radius:10px;text-align:center;border:1px dashed rgba(200,200,220,0.2);background:rgba(200,200,220,0.02);min-width:110px"><div style="font-size:24px;margin-bottom:4px">🚚</div><div style="font-size:13px;font-weight:700;color:#8899bb">第三方物流(3PL)</div><div style="font-size:10px;color:#6a7a9a;line-height:1.3">承运至代理商 · 费用代理直付</div></div>
+</div>
+
+<div style="position:fixed;top:14px;right:14px;z-index:999;display:flex;gap:3px;border-radius:10px;padding:5px 7px;backdrop-filter:blur(12px);background:rgba(10,18,36,.92);border:1px solid rgba(60,100,170,.18)">
+  <button onclick="setTheme('dark')" style="width:22px;height:22px;border-radius:50%;border:2px solid rgba(74,140,255,.5);background:#0a0e18;cursor:pointer" title="深空"></button>
+  <button onclick="setTheme('warm')" style="width:22px;height:22px;border-radius:50%;border:2px solid rgba(160,130,80,.3);background:#1c1812;cursor:pointer" title="暖色"></button>
+  <button onclick="setTheme('light')" style="width:22px;height:22px;border-radius:50%;border:2px solid rgba(60,120,240,.3);background:#f0f4fe;cursor:pointer" title="浅色"></button>
+  <span style="width:1px;height:22px;background:rgba(60,80,120,0.15);margin:0 3px"></span>
+  <button onclick="checkUpdate()" style="padding:0 7px;height:22px;border-radius:5px;border:1px solid rgba(60,120,240,0.3);background:rgba(90,172,255,0.1);color:#5aacff;cursor:pointer;font-size:10px;font-family:inherit;white-space:nowrap">🔄 更新</button>
+</div>
+
+<div class="bc" style="display:flex;gap:12px;flex-wrap:wrap;margin:16px 0 20px;padding:14px 20px;border-radius:12px" id="kpi">
+<div style="min-width:150px"><div class="mc" style="font-size:10px;font-weight:600">SPS对外FOB售价</div><div style="font-size:28px;font-weight:800;color:#f0c040;margin-top:2px">€<span id="fobPriceDisplay">28,448</span><span class="mc" style="font-size:14px;font-weight:400">/1000件</span></div><div class="mc" style="font-size:10px">毛利率 <span style="color:#f0c040;font-weight:700">42%</span></div></div>
+<div style="width:1px;height:36px;background:rgba(60,80,120,.2)"></div>
+<div style="min-width:140px"><div class="mc" style="font-size:10px;font-weight:600">Yusen-DE年运营费</div><div style="font-size:22px;font-weight:700;color:#5aacff;margin-top:2px">€605,255</div><div class="mc" style="font-size:10px">入仓+仓储+出库+管理</div></div>
+<div style="width:1px;height:36px;background:rgba(60,80,120,.2)"></div>
+<div style="min-width:140px"><div class="mc" style="font-size:10px;font-weight:600">进口VAT(可抵扣)</div><div style="font-size:22px;font-weight:700;color:#e0c040;margin-top:2px">€<span id="vatKpiVal">4,434</span></div><div class="mc" style="font-size:10px">19% auf CIF+关税</div></div>
+<div style="width:1px;height:36px;background:rgba(60,80,120,.2)"></div>
+<div style="min-width:140px"><div class="mc" style="font-size:10px;font-weight:600">单位物流成本</div><div style="font-size:22px;font-weight:700;color:#30d0a0;margin-top:2px">€2.63/件</div><div class="mc" style="font-size:10px">出口+Yusen运营(不含VAT)</div></div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+<div class="bc" style="border-radius:12px;padding:16px"><h3 class="h3c" style="font-size:14px;font-weight:700;margin:0 0 10px">💼 SPS利润表 (1000件) <span style="font-size:9px;padding:2px 8px;border-radius:8px;background:rgba(74,140,255,.15);color:#5aacff;font-weight:500">P&amp;L</span></h3>
+<table style="width:100%;border-collapse:collapse;font-size:13px"><tbody id="spsPLBody"></tbody></table></div>
+<div class="bc" style="border-radius:12px;padding:16px"><h3 class="h3c" style="font-size:14px;font-weight:700;margin:0 0 10px">🏢 年成本结构 (FY27) <span style="font-size:9px;padding:2px 8px;border-radius:8px;background:rgba(74,140,255,.15);color:#5aacff;font-weight:500">Doughnut</span></h3>
+<div style="height:340px"><canvas id="annualDoughnut"></canvas></div></div>
+</div>
+
+<div class="bc" style="border-radius:12px;padding:16px;margin-bottom:16px"><h3 class="h3c" style="font-size:14px;font-weight:700;margin:0 0 10px">📈 全链路利润瀑布图 (1000件/批次) <span style="font-size:9px;padding:2px 8px;border-radius:8px;background:rgba(74,140,255,.15);color:#5aacff;font-weight:500">Waterfall</span></h3>
+<div style="height:440px;overflow-y:auto;overflow-x:hidden" id="batchContainer"></div></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+<div class="bc" style="border-radius:12px;padding:14px"><h3 class="h3c" style="font-size:13px;font-weight:700;margin:0 0 8px">🏪 供应商全成本对比</h3>
+<div style="height:240px"><canvas id="supplierChart"></canvas></div></div>
+<div class="bc" style="border-radius:12px;padding:14px"><h3 class="h3c" style="font-size:13px;font-weight:700;margin:0 0 8px">📊 仓储成本拆解 (Yusen vs JD-DE)</h3>
+<div style="height:240px"><canvas id="whChart"></canvas></div></div>
+</div>
+
+<div class="bc" style="border-radius:12px;padding:16px;margin-bottom:16px"><h3 class="h3c" style="font-size:14px;font-weight:700;margin:0 0 10px">📋 SPS年成本明细表 <span style="font-size:9px;padding:2px 8px;border-radius:8px;background:rgba(74,140,255,.15);color:#5aacff;font-weight:500">Yusen-DE · FY27 · 含VAT</span></h3>
+<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
+<thead><tr><th style="padding:6px 8px;text-align:left;font-weight:700;color:#7a8aaa;border-bottom:1px solid rgba(60,80,120,.2);font-size:10px;text-transform:uppercase">成本项目</th><th style="padding:6px 8px;text-align:right;font-weight:700;color:#7a8aaa;border-bottom:1px solid rgba(60,80,120,.2);font-size:10px">年金额(€)</th><th style="padding:6px 8px;text-align:right;font-weight:700;color:#7a8aaa;border-bottom:1px solid rgba(60,80,120,.2);font-size:10px">/1000件</th><th style="padding:6px 8px;text-align:right;font-weight:700;color:#7a8aaa;border-bottom:1px solid rgba(60,80,120,.2);font-size:10px">占比</th><th style="padding:6px 8px;text-align:left;font-weight:700;color:#7a8aaa;border-bottom:1px solid rgba(60,80,120,.2);font-size:10px">说明</th></tr></thead>
+<tbody id="tableBody"></tbody></table></div></div>
+
+<div class="bc" style="border-radius:12px;padding:16px;margin-bottom:16px"><h3 class="h3c" style="font-size:14px;font-weight:700;margin:0 0 8px">📋 德国VAT全景 <span style="font-size:9px;padding:2px 8px;border-radius:8px;background:rgba(224,192,64,.15);color:#e0c040;font-weight:500">VAT Analysis</span></h3>
+<div id="vatSummary" style="font-size:12px;line-height:1.7"></div></div>
+
+<div class="bc" style="border-radius:12px;padding:16px;margin-bottom:16px"><h3 class="h3c" style="font-size:14px;font-weight:700;margin:0 0 8px">🤝 代理商采购方案对比 <span style="font-size:9px;padding:2px 8px;border-radius:8px;background:rgba(240,192,64,.15);color:#d4a820;font-weight:500">FOB vs 德国仓</span></h3>
+<div id="agentSummary" style="font-size:12px;line-height:1.7"></div></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+<div class="bc" style="border-radius:10px;padding:14px;border:2px solid rgba(48,208,160,.3)"><div style="font-size:14px;font-weight:700;color:#30d0a0;margin-bottom:6px">✅ Yusen-DE推荐</div><div class="mc2" style="font-size:11px;line-height:1.6">📍距汉堡60km · 💰年省€166k-605k<br>⚡LTL覆盖全EU · 🔗现成SAP接口<br>📊重量分档匹配 · 🛡️DE VAT高效</div></div>
+<div class="bc" style="border-radius:10px;padding:14px"><div style="font-size:14px;font-weight:700;color:#f0c040;margin-bottom:6px">🎯 SPS定价策略</div><div class="mc2" style="font-size:11px;line-height:1.6">SPS对外FOB(上海): <strong style="color:#f0c040">€28,448</strong>/1000件 (毛利率42%)<br>A→B转移价: <strong style="color:#e09040">€24,181</strong>/1000件 (15%折扣)<br>B对代理售价: <strong style="color:#5aacff">€31,947</strong>/1000件 (+12.3%)<br><span style="color:#30d0a0">▼ 代理对比方案: 0%=€28,448, 10%=€31,293</span></div></div>
+<div class="bc" style="border-radius:10px;padding:14px"><div style="font-size:14px;font-weight:700;color:#30d0a0;margin-bottom:6px">🔍 FOB(上海) vs 德国仓 利润对比</div><div class="mc2" style="font-size:11px;line-height:1.6">
+ <strong style="color:#e06060">FOB模式(中国直购)</strong>：A售价€28,448/千件 · 成本€16,616 · <strong style="color:#e0e8f4">毛利€11,832</strong> · <strong style="color:#f0c040">毛利率41.6%</strong><br>
+ <strong style="color:#5aacff">德国仓模式</strong>：B售价€31,947/千件 · 成本€22,194 · <strong style="color:#e0e8f4">毛利€9,753</strong> · <strong style="color:#f0c040">毛利率30.5%</strong><br>
+ &thinsp;&thinsp;&thinsp;A转移毛利€7,565 + B运营毛利€2,188 = 集团合并毛利€9,753<br>
+ <span style="color:#e0c040">售价+12.3%(€3,499) 但新增仓储+海运+关税€5,578 → 单件毛利-€2,079</span><br>
+ <span style="color:#30d0a0">⚡ 销量需提升<span style="font-weight:700">~21%至177,780件/年</span>才能拉平利润总额</span></div></div>
+</div>
+
+<div style="text-align:center;padding:16px 0 0;font-size:10px;color:#5a6a8a;border-top:1px solid rgba(60,80,120,.2);margin-top:16px">
+<strong style="color:#7a8aaa">数据源：</strong> SPS E2E Cost simulation 0512-FY27.xlsx | SPS BU专属数据<br>
+<strong style="color:#7a8aaa">VAT说明：</strong> 进口VAT 19%可全额抵扣退税；B对EU代理商销售按0% VAT处理(Reverse Charge)；净VAT结果为零成本<br>
+<span id="versionDisplay" style="color:#5a6a8a;font-size:9px">v20250515.2 · 全面修正: P&L/VAT/KPI/关税/甜甜圈</span>
+</div>
+
+<script>
+var VERSION = '20250515.2';
+var UPDATE_URL = 'https://raw.githubusercontent.com/XCS2026/sps-cost-model/main/sps-cost-model_latest.html';
+function checkUpdate() {
+  var btn = document.querySelector('.tsw button:last-child');
+  fetch(UPDATE_URL + '?t=' + Date.now()).then(function(r) { return r.text(); }).then(function(html) {
+    var m = html.match(/var VERSION = ['\u0022](\d+\.\d+)['\u0022]/);
+    if (!m) { throw new Error('version not found'); }
+    var rv = m[1];
+    if (rv === VERSION) { btn.textContent = '\u2705 已是最新'; btn.style.color = '#30d0a0'; }
+    else if (rv > VERSION) { btn.textContent = '\uD83D\uDCE5 新版本可用'; btn.style.color = '#f0c040';
+      btn.onclick = function(){ window.location.href = UPDATE_URL; }; }
+    else { btn.textContent = '\u26A0\uFE0F 版本异常'; btn.style.color = '#e06060'; }
+    setTimeout(function(){ btn.textContent = '\uD83D\uDD04 更新'; btn.style.color = '#5aacff'; btn.onclick = null; }, 5000);
+  }).catch(function(){ btn.textContent = '\u274C 检查失败'; btn.style.color = '#e06060';
+    setTimeout(function(){ btn.textContent = '\uD83D\uDD04 更新'; btn.style.color = '#5aacff'; }, 3000); });
+}
+
+// ===== DYNAMIC DATA =====
+var FOB_PER_1000 = 28448;
+var TRANSFER_PER_1000 = Math.round(FOB_PER_1000 * 0.85);
+var COST_PER_1000 = 16500;
+var SPS_VOL = 146698;
+var B_MARGIN_RATE = 0.08;
+var DUTY_RATE = 0.04;
+var GERMAN_VAT = 0.19;
+var B_PRICE_UPLIFT = 1.123;
+
+var Ydata = {
+  drayage: 8339.24, customsExport: 1312.97, booking: 7374.72, freight: 68551.65,
+  inboundTransport: 10584, customsImport: 15835.5, inboundHandling: 13932,
+  outboundHandling: 52442.67, rental: 204461, consumables: 8000, management: 270423,
+  w2w: 18666.67, sap: 10910.22, parcelDom: 5954.71, parcelCross: 54800.78,
+  ltlDom: 27012.86, ltlCross: 214082.03
+};
+var K = function(v) { return Math.round(v / SPS_VOL * 1000); };
+var mfgAnnual = Math.round(COST_PER_1000 * SPS_VOL / 1000);
+var spsExportAnnual = Ydata.drayage + Ydata.customsExport + Ydata.booking + Ydata.freight;
+var yusenWH = Ydata.inboundTransport + Ydata.customsImport + Ydata.inboundHandling + Ydata.outboundHandling + Ydata.rental + Ydata.consumables + Ydata.management + Ydata.w2w + Ydata.sap;
+var yusenDelivery = Ydata.parcelDom + Ydata.parcelCross + Ydata.ltlDom + Ydata.ltlCross;
+var exportLandK = K(Ydata.drayage) + K(Ydata.customsExport) + K(Ydata.booking);
+var freightK = K(Ydata.freight);
+var exportK = exportLandK + freightK;
+var yusenWHK = K(Ydata.inboundTransport) + K(Ydata.customsImport) + K(Ydata.inboundHandling) + K(Ydata.outboundHandling) + K(Ydata.rental) + K(Ydata.consumables) + K(Ydata.management) + K(Ydata.w2w) + K(Ydata.sap);
+var bTotalCostK = TRANSFER_PER_1000 + yusenWHK;
+var bSellK = Math.round(FOB_PER_1000 * B_PRICE_UPLIFT);
+var DUTY_K = Math.round((TRANSFER_PER_1000 + freightK) * DUTY_RATE);
+var IMPORT_VAT_K = Math.round((TRANSFER_PER_1000 + freightK + Math.round((TRANSFER_PER_1000 + freightK) * DUTY_RATE)) * GERMAN_VAT);
+var DUTY_ANNUAL = Math.round(DUTY_K * SPS_VOL / 1000);
+var IMPORT_VAT_ANNUAL = Math.round(IMPORT_VAT_K * SPS_VOL / 1000);
+
+// ===== THEME =====
+function setTheme(t) { document.body.className = t; }
+
+// ===== PL TABLE =====
+(function() {
+  var t = document.getElementById('spsPLBody');
+  var h = '';
+  h += '<tr><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);color:#e0e8f4">SPS制造成本(含质检)</td><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);text-align:right;font-weight:700;color:#e0e8f4">€' + COST_PER_1000.toLocaleString() + '/1000件</td></tr>';
+  h += '<tr><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);color:#e0e8f4">对外FOB售价 (毛利' + Math.round((FOB_PER_1000 - COST_PER_1000 - exportLandK) / FOB_PER_1000 * 100) + '%)</td><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);text-align:right;font-weight:700;color:#f0c040">€' + FOB_PER_1000.toLocaleString() + '/1000件</td></tr>';
+  h += '<tr><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);color:#e0e8f4">SPS对外毛利(扣除到港费)</td><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);text-align:right;font-weight:700;color:#30d0a0">€' + (FOB_PER_1000 - COST_PER_1000 - exportLandK).toLocaleString() + '/1000件 (' + Math.round((FOB_PER_1000 - COST_PER_1000 - exportLandK) / FOB_PER_1000 * 100) + '%)</td></tr>';
+  h += '<tr><td colspan="2" style="padding:10px 8px 4px;font-weight:700;font-size:11px;color:#e09040;border-bottom:1px solid rgba(60,80,120,0.15)">—— 建立德国仓后 ——</td></tr>';
+  h += '<tr><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);color:#e0e8f4">A→B内部转移价 (15%折扣)</td><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);text-align:right;font-weight:700;color:#e09040">€' + TRANSFER_PER_1000.toLocaleString() + '/1000件</td></tr>';
+  h += '<tr><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);color:#e0e8f4">A保留毛利 (关联交易)</td><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);text-align:right;font-weight:700;color:#30d0a0">€' + (TRANSFER_PER_1000 - COST_PER_1000 - exportLandK).toLocaleString() + '/1000件 (' + Math.round((TRANSFER_PER_1000 - COST_PER_1000 - exportLandK) / TRANSFER_PER_1000 * 100) + '%)</td></tr>';
+  h += '<tr><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);color:#e0e8f4">让利给B的折扣</td><td style="padding:6px 10px;border-bottom:1px solid rgba(60,80,120,0.08);text-align:right;font-weight:700;color:#e06060">-€' + (FOB_PER_1000 - TRANSFER_PER_1000).toLocaleString() + '/1000件</td></tr>';
+  t.innerHTML = h;
+})();
+
+// ===== CUSTOM LABEL PLUGIN =====
+(function() {
+  if (typeof Chart === 'undefined') return;
+  var existing = Chart.registry.plugins.get('labelDraw');
+  if (existing) { Chart.unregister(existing); }
+  Chart.register({
+    id: 'labelDraw',
+    afterDraw: function(chart) {
+      var ctx = chart.ctx;
+      if (chart.config.type === 'doughnut') {
+        var meta = chart.getDatasetMeta(0);
+        if (!meta || !meta.data) return;
+        var total = chart.data.datasets[0].data.reduce(function(s, v) { return s + v; }, 0);
+        ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = 'bold 13px Inter, sans-serif'; ctx.fillStyle = '#ffffff';
+        meta.data.forEach(function(arc, i) {
+          var val = chart.data.datasets[0].data[i];
+          if (!val || val / total < 0.04) return;
+          var angle = arc.startAngle + (arc.endAngle - arc.startAngle) / 2;
+          var radius = (arc.outerRadius + arc.innerRadius) / 2;
+          var x = arc.x + Math.cos(angle) * radius;
+          var y = arc.y + Math.sin(angle) * radius;
+          ctx.fillText('\u20AC' + (val/1000).toFixed(0) + 'k', x, y - 7);
+          ctx.fillText((val/total*100).toFixed(1) + '%', x, y + 8);
+        });
+        ctx.restore(); return;
+      }
+      if (chart.canvas && chart.canvas.id === 'supplierChart') {
+        var meta = chart.getDatasetMeta(0);
+        if (!meta || !meta.data) return;
+        ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.font = 'bold 12px Inter, sans-serif'; ctx.fillStyle = '#ffffff'; ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.lineWidth = 2;
+        meta.data.forEach(function(bar, i) {
+          var val = chart.data.datasets[0].data[i];
+          var txt = '\u20AC' + (val / 1000).toFixed(0) + 'k';
+          ctx.strokeText(txt, bar.x, bar.y - 4); ctx.fillText(txt, bar.x, bar.y - 4);
+        });
+        ctx.restore(); return;
+      }
+      if (chart.canvas && chart.canvas.id === 'whChart') {
+        var meta = chart.getDatasetMeta(0);
+        if (!meta || !meta.data) return;
+        ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.font = 'bold 12px Inter, sans-serif'; ctx.fillStyle = '#ffffff'; ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.lineWidth = 2;
+        chart.data.datasets.forEach(function(ds, di) {
+          var m = chart.getDatasetMeta(di); if (!m || !m.data) return;
+          m.data.forEach(function(bar, i) {
+            var val = ds.data[i]; if (!val || val < 10000) return;
+            var txt = '\u20AC' + (val / 1000).toFixed(1) + 'k';
+            ctx.strokeText(txt, bar.x, bar.y - 4); ctx.fillText(txt, bar.x, bar.y - 4);
+          });
+        });
+        ctx.restore(); return;
+      }
+    }
+  });
+})();
+
+// ===== DOUGHNUT =====
+var annualDoughnut = null;
+function buildDoughnut() {
+  var el = document.getElementById('annualDoughnut');
+  if (!el) return;
+  annualDoughnut = new Chart(el, {
+    type: 'doughnut',
+    data: {
+      labels: ['SPS制造成本(含质检)', 'SPS出口+海运(上海→汉堡)', 'Yusen仓储运营', '进口关税4%'],
+      datasets: [{
+        data: [mfgAnnual, spsExportAnnual, yusenWH, DUTY_ANNUAL],
+        backgroundColor: ['rgba(224,96,96,0.85)', 'rgba(224,144,64,0.85)', 'rgba(176,112,224,0.85)', 'rgba(200,180,100,0.7)'],
+        borderColor: ['#e06060', '#e09040', '#b070e0', '#c8b060'],
+        borderWidth: 2, hoverOffset: 16
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'right', labels: { color: '#e0e8f4', padding: 10, font: { size: 11, weight: '500', family: 'Inter' }, usePointStyle: true } } },
+      cutout: '40%'
+    }
+  });
+}
+buildDoughnut();
+
+// ===== WATERFALL =====
+(function() {
+  var c = document.getElementById('batchContainer');
+  var maxV = FOB_PER_1000;
+  var h = '';
+  h += '<div style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:linear-gradient(135deg,rgba(240,192,64,0.12),rgba(90,172,255,0.06));border:1px solid rgba(240,192,64,0.2);border-radius:10px;margin-bottom:8px"><span style="font-size:18px">\uD83D\uDCB0</span><span style="font-size:14px;font-weight:600;flex:1;color:#e0e8f4">SPS对外FOB售价 (含42%毛利)</span><span style="font-size:18px;font-weight:800;color:#f0c040">\u20AC' + FOB_PER_1000.toLocaleString() + '</span></div>';
+  var bar = function(l, v, col, pad, formula) {
+    var pct = v / maxV * 100;
+    var w = (pct * 1.2 < 5) ? 5 : (pct * 1.2);
+    h += '<div style="display:flex;align-items:center;gap:8px;padding:5px 0 1px ' + (pad || '0') + '"><span style="width:10px;height:10px;border-radius:50%;background:' + col + ';flex-shrink:0"></span><span style="font-size:13px;flex:1;color:#e0e8f4">' + l + '</span><div style="flex:2;height:8px;background:rgba(60,80,120,0.08);border-radius:4px;overflow:hidden"><div style="height:100%;width:' + w + '%;background:' + col + ';border-radius:4px"></div></div><span style="font-size:13px;font-weight:700;min-width:64px;text-align:right;font-family:Inter;color:#f0f4ff">\u20AC' + v.toLocaleString() + '</span><span style="font-size:10px;min-width:36px;text-align:right;color:#8899bb">' + pct.toFixed(1) + '%</span></div>';
+    if (formula) {
+      h += '<div style="padding:0 0 3px ' + (pad || '0') + ' 28px;font-size:9px;color:#5a6a8a;font-family:monospace">\u2192 ' + formula + '</div>';
+    }
+  };
+  var sub = function(l, v) {
+    h += '<div style="display:flex;align-items:center;gap:8px;padding:2px 0 2px 28px"><span style="width:5px;height:5px;border-radius:50%;background:rgba(200,200,220,0.15);flex-shrink:0"></span><span style="font-size:11px;flex:1;color:#6a7a9a">' + l + '</span><span style="font-size:11px;font-weight:600;min-width:52px;text-align:right;font-family:Inter;color:#8899bb">\u20AC' + v.toLocaleString() + '</span></div>';
+  };
+  bar('SPS制造成本(含质检)', COST_PER_1000, '#e06060', '', '€16,500/千件 = 制造总成本÷年量×1000');
+  bar('A→B内部让利(15%折扣)', FOB_PER_1000 - TRANSFER_PER_1000, '#e06060', '24px', '€' + FOB_PER_1000.toLocaleString() + ' × 15% = €' + (FOB_PER_1000 - TRANSFER_PER_1000).toLocaleString());
+  h += '<div style="height:1px;background:linear-gradient(90deg,rgba(60,100,160,0.2),transparent);margin:3px 0 3px 24px"></div>';
+  bar('A→B转移价 (A保留毛利~22%)', TRANSFER_PER_1000, '#30d0a0', '', '€' + FOB_PER_1000.toLocaleString() + ' × 85% = €' + TRANSFER_PER_1000.toLocaleString());
+  sub('A端成本(制造+出口至上海港)', COST_PER_1000 + exportLandK);
+  sub('A关联交易毛利', TRANSFER_PER_1000 - COST_PER_1000 - exportLandK);
+  h += '<div style="height:1px;background:linear-gradient(90deg,rgba(60,100,160,0.2),transparent);margin:3px 0 3px 24px"></div>';
+  var bFullCostK = yusenWHK + freightK + DUTY_K;
+  bar('B运营总成本(仓储+海运+关税)', bFullCostK, '#b070e0', '24px', '仓储€' + yusenWHK.toLocaleString() + ' + 海运€' + freightK.toLocaleString() + ' + 关税€' + DUTY_K.toLocaleString());
+  bar('B运营利润 (占B售价' + Math.round((bSellK - bTotalCostK - freightK - DUTY_K) / bSellK * 100) + '%)', bSellK - bTotalCostK - freightK - DUTY_K, '#30d0a0', '24px', '€' + bSellK.toLocaleString() + ' - 转移价€' + TRANSFER_PER_1000.toLocaleString() + ' - 仓储€' + yusenWHK.toLocaleString() + ' - 海运€' + freightK.toLocaleString() + ' - 关税€' + DUTY_K.toLocaleString() + ' = €' + (bSellK - bTotalCostK - freightK - DUTY_K).toLocaleString());
+  h += '<div style="height:1px;background:linear-gradient(90deg,rgba(60,100,160,0.2),transparent);margin:3px 0 3px 24px"></div>';
+  bar('B对代理售价 (不含VAT)', bSellK, '#5aacff', '', 'FOB€' + FOB_PER_1000.toLocaleString() + ' × 112.3% = €' + bSellK.toLocaleString());
+  h += '<div style="height:1px;background:linear-gradient(90deg,rgba(200,180,100,0.3),transparent);margin:3px 0 3px 24px"></div>';
+  bar('+ 进口VAT 19%', IMPORT_VAT_K, '#e0c040', '0', '(€' + (TRANSFER_PER_1000 + freightK).toLocaleString() + ' + 关税€' + DUTY_K.toLocaleString() + ') × 19% = €' + IMPORT_VAT_K.toLocaleString());
+  h += '<div style="display:flex;align-items:center;gap:8px;padding:4px 0 4px 24px"><span style="font-size:11px;flex:1;color:#30d0a0">\u2190 进口VAT可全额抵扣退税</span><span style="font-size:11px;font-weight:600;min-width:52px;text-align:right;color:#30d0a0">-\u20AC' + IMPORT_VAT_K.toLocaleString() + '</span></div>';
+  var bActualCash = bSellK + DUTY_K;
+  h += '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;background:rgba(48,208,160,0.04);border-radius:6px;margin-top:2px"><span style="font-size:13px;flex:1;font-weight:600;color:#e0e8f4;padding-left:14px">\u2606 B实际现金支出 (含关税, VAT已抵扣)</span><span style="font-size:14px;font-weight:800;min-width:64px;text-align:right;font-family:Inter;color:#30d0a0;padding-right:8px">\u20AC' + bActualCash.toLocaleString() + '</span></div>';
+  var am = TRANSFER_PER_1000 - COST_PER_1000 - exportLandK;
+  var bm = bSellK - bTotalCostK - freightK - DUTY_K;
+  h += '<div style="margin-top:6px;padding:8px 12px;border:1px dashed rgba(90,172,255,0.2);border-radius:6px;font-size:11px;background:rgba(90,172,255,0.03)"><span style="color:#6a7a9a">\uD83D\uDD39 SPS集团合并毛利 = </span>A \u20AC' + am.toLocaleString() + ' + B \u20AC' + bm.toLocaleString() + ' = <strong style="color:#30d0a0">\u20AC' + (am + bm).toLocaleString() + '/1000\u4EF6</strong>&nbsp;&nbsp;|&nbsp;&nbsp;VAT净成本: <strong style="color:#e0c040">\u20AC0</strong> (全额抵扣)</div>';
+  c.innerHTML = h;
+})();
+
+// ===== SUPPLIER CHART =====
+var supplierChart = null;
+function buildSupplierChart() {
+  var el = document.getElementById('supplierChart');
+  if (!el) return;
+  supplierChart = new Chart(el, {
+    type: 'bar',
+    data: {
+      labels: ['Yusen-DE\nSittensen', 'Suus-PL\nGda\u0144sk', 'JD-DE\nEssen', 'JD-PL\nSlubice'],
+      datasets: [{
+        data: [599105, 765213, 1203967, 1099091],
+        backgroundColor: ['rgba(48,208,160,0.8)', 'rgba(176,112,224,0.55)', 'rgba(224,144,64,0.55)', 'rgba(240,192,64,0.55)'],
+        borderColor: ['#30d0a0', '#b070e0', '#e09040', '#f0c040'],
+        borderWidth: 2, borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#e0e8f4', font: { size: 10 } }, grid: { display: false } },
+        y: { beginAtZero: true, ticks: { color: '#8899bb', font: { size: 9 }, callback: function(v) { return '\u20AC' + (v / 1000).toFixed(0) + 'k'; } }, grid: { color: 'rgba(60,80,120,0.05)' } }
+      }
+    }
+  });
+}
+buildSupplierChart();
+
+// ===== WH CHART =====
+var whChart = null;
+function buildWhChart() {
+  var el = document.getElementById('whChart');
+  if (!el) return;
+  whChart = new Chart(el, {
+    type: 'bar',
+    data: {
+      labels: ['\u5165\u5E93\u8D39', '\u51FA\u5E93\u8D39', '\u79DF\u91D1', '\u8017\u6750\u8D39'],
+      datasets: [
+        { label: 'Yusen-DE', data: [13932, 52443, 204461, 8000], backgroundColor: 'rgba(48,208,160,0.8)', borderColor: '#30d0a0', borderWidth: 1, borderRadius: 5 },
+        { label: 'JD-DE', data: [59068, 165689, 477252, 57819], backgroundColor: 'rgba(224,144,64,0.5)', borderColor: '#e09040', borderWidth: 1, borderRadius: 5 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { color: '#e0e8f4', padding: 12, font: { size: 11 }, boxWidth: 14 } } },
+      scales: {
+        x: { ticks: { color: '#e0e8f4', font: { size: 10 } }, grid: { display: false } },
+        y: { beginAtZero: true, ticks: { color: '#8899bb', font: { size: 9 }, callback: function(v) { return '\u20AC' + (v / 1000).toFixed(0) + 'k'; } }, grid: { color: 'rgba(60,80,120,0.05)' } }
+      }
+    }
+  });
+}
+buildWhChart();
+
+// ===== TABLE =====
+(function() {
+  var t = document.getElementById('tableBody');
+  var totalWithVAT = mfgAnnual + spsExportAnnual + yusenWH + yusenDelivery + DUTY_ANNUAL + IMPORT_VAT_ANNUAL;
+  var tr = function(l, a, n) {
+    var p = a / totalWithVAT * 100;
+    return '<tr><td style="padding:5px 8px;border-bottom:1px solid rgba(60,80,120,0.08);color:#e0e8f4">' + l + '</td><td style="padding:5px 8px;border-bottom:1px solid rgba(60,80,120,0.08);text-align:right;font-weight:600;color:#e0e8f4">\u20AC' + Math.round(a).toLocaleString() + '</td><td style="padding:5px 8px;border-bottom:1px solid rgba(60,80,120,0.08);text-align:right;color:#7a8aaa">\u20AC' + K(a).toLocaleString() + '</td><td style="padding:5px 8px;border-bottom:1px solid rgba(60,80,120,0.08);text-align:right;color:#7a8aaa">' + p.toFixed(1) + '%</td><td style="padding:5px 8px;border-bottom:1px solid rgba(60,80,120,0.08);font-size:11px;color:#6a7a9a">' + (n || '') + '</td></tr>';
+  };
+  var sub = function(l, a) {
+    return '<tr><td style="padding:3px 8px 3px 24px;border-bottom:1px solid rgba(60,80,120,0.04);font-size:11px;color:#6a7a9a">' + l + '</td><td style="padding:3px 8px;border-bottom:1px solid rgba(60,80,120,0.04);text-align:right;font-size:11px;color:#7a8aaa">\u20AC' + Math.round(a).toLocaleString() + '</td><td></td><td></td><td></td></tr>';
+  };
+  var h = '';
+  h += '<tr><td style="padding:8px 8px 4px;font-weight:700;font-size:11px;color:#e06060;border-bottom:1px solid rgba(60,80,120,0.15);letter-spacing:0.3px" colspan="5">SPS端 · 常州制造与出口</td></tr>';
+  h += tr('SPS制造成本(含质检)', mfgAnnual, '€16.5/件');
+  h += tr('中国出口+海运(Excel)', spsExportAnnual, 'Excel实算');
+  h += sub('常州→上海拖车', Ydata.drayage); h += sub('出口报关+订舱', Ydata.customsExport + Ydata.booking); h += sub('国际海运(上海→汉堡)', Ydata.freight);
+  var fobRevenue = Math.round(FOB_PER_1000 * SPS_VOL / 1000);
+  h += '<tr style="border-bottom:2px solid rgba(224,96,96,0.2)"><td style="padding:5px 8px;font-weight:700;color:#f0c040;font-size:12px">💰 FOB出口额 (对外售价×年量)</td><td style="padding:5px 8px;text-align:right;font-weight:700;color:#f0c040;font-size:12px">\u20AC' + fobRevenue.toLocaleString() + '</td><td style="padding:5px 8px;text-align:right;font-weight:700;color:#f0c040;font-size:12px">\u20AC' + FOB_PER_1000.toLocaleString() + '</td><td></td><td style="padding:5px 8px;font-size:11px;color:#6a7a9a">毛利率' + Math.round((FOB_PER_1000 - COST_PER_1000 - exportLandK) / FOB_PER_1000 * 100) + '%</td></tr>';
+  h += '<tr style="font-size:10px"><td style="padding:2px 8px;color:#6a7a9a" colspan="5">⚠ 注意：€' + mfgAnnual.toLocaleString() + '是制造成本，非FOB出口额。FOB(上海)=€' + FOB_PER_1000.toLocaleString() + '/千件×' + SPS_VOL.toLocaleString() + '件=€' + fobRevenue.toLocaleString() + '</td></tr>';
+  h += '<tr><td style="padding:8px 8px 4px;font-weight:700;font-size:11px;color:#5aacff;border-bottom:1px solid rgba(60,80,120,0.15);letter-spacing:0.3px" colspan="5">Yusen-DE · Sittensen德国仓运营</td></tr>';
+  h += tr('目的港→仓库', Ydata.inboundTransport + Ydata.customsImport, '拖车+清关');
+  h += sub('汉堡港→Sittensen拖车', Ydata.inboundTransport); h += sub('进口清关', Ydata.customsImport);
+  h += tr('仓储操作(入库+出库+租金)', Ydata.inboundHandling + Ydata.outboundHandling + Ydata.rental, '按location取高值');
+  h += sub('入库卸货理货', Ydata.inboundHandling); h += sub('出库拣货打包', Ydata.outboundHandling); h += sub('仓库租金(€9.125/㎡)', Ydata.rental);
+  h += tr('B管理及杂项', Ydata.management + Ydata.w2w + Ydata.sap, '团队+盘点+SAP');
+  h += tr('末端配送(代理商自付)', yusenDelivery, '3PL代理直付');
+  h += '<tr><td style="padding:8px 8px 4px;font-weight:700;font-size:11px;color:#e0c040;border-bottom:1px solid rgba(60,80,120,0.15);letter-spacing:0.3px" colspan="5">德国关税 & VAT</td></tr>';
+  h += tr('进口关税 (4% auf CIF)', DUTY_ANNUAL, 'CIF=€' + TRANSFER_PER_1000.toLocaleString() + '/1000件');
+  h += tr('进口VAT 19% (可抵扣退税)', IMPORT_VAT_ANNUAL, '基数=CIF+关税');
+  // ===== GROUP P&L =====
+  var groupRevenue = Math.round(bSellK * SPS_VOL / 1000);
+  var groupCost = Math.round(mfgAnnual + spsExportAnnual + yusenWH + DUTY_ANNUAL);
+  var groupProfit = groupRevenue - groupCost;
+  var groupMargin = groupProfit / groupRevenue * 100;
+  h += '<tr><td style="padding:8px 8px 4px;font-weight:700;font-size:11px;color:#30d0a0;border-bottom:1px solid rgba(48,208,160,0.2);letter-spacing:0.3px" colspan="5">📊 集团合并损益 (对外口径)</td></tr>';
+  h += tr('集团对外收入 (B对代理商售价×年量)', groupRevenue, '€' + bSellK.toLocaleString() + '/1000件, ' + SPS_VOL.toLocaleString() + '件');
+  h += tr('集团现金成本 (制造+出口+仓储+关税)', groupCost, '不含末端配送(代理直付)');
+  h += sub('SPS制造成本', mfgAnnual); h += sub('出口海运', spsExportAnnual); h += sub('Yusen运营', yusenWH); h += sub('进口关税', DUTY_ANNUAL);
+  h += '<tr style="font-weight:700;background:rgba(48,208,160,0.04)"><td style="padding:6px 8px;border-bottom:2px solid rgba(48,208,160,0.3);color:#30d0a0;font-size:13px">✦ 集团合并毛利</td><td style="padding:6px 8px;border-bottom:2px solid rgba(48,208,160,0.3);text-align:right;color:#30d0a0;font-size:16px">€' + groupProfit.toLocaleString() + '</td><td style="padding:6px 8px;border-bottom:2px solid rgba(48,208,160,0.3);text-align:right;color:#30d0a0;font-size:14px">€' + K(groupProfit).toLocaleString() + '</td><td style="padding:6px 8px;border-bottom:2px solid rgba(48,208,160,0.3);text-align:right;color:#30d0a0;font-size:15px">' + groupMargin.toFixed(1) + '%</td><td style="padding:6px 8px;border-bottom:2px solid rgba(48,208,160,0.3);font-size:11px;color:#30d0a0"></td></tr>';
+  h += '<tr style="font-weight:700"><td style="padding:8px;border-top:2px solid #e0c040;color:#f0f4ff">SPS集团年总现金支出 (含VAT)</td><td style="padding:8px;border-top:2px solid #e0c040;text-align:right;color:#e0c040;font-size:15px">\u20AC' + Math.round(totalWithVAT).toLocaleString() + '</td><td style="padding:8px;border-top:2px solid #e0c040;text-align:right;color:#e0c040">\u20AC' + K(totalWithVAT).toLocaleString() + '</td><td style="padding:8px;border-top:2px solid #e0c040;text-align:right;color:#7a8aaa">100%</td><td style="padding:8px;border-top:2px solid #e0c040;font-size:11px;color:#6a7a9a"></td></tr>';
+  h += '<tr style="font-weight:700"><td style="padding:4px 8px;border-top:1px dashed rgba(48,208,160,0.3);color:#30d0a0;font-size:11px">− 其中：进口VAT可全额抵扣退税</td><td style="padding:4px 8px;border-top:1px dashed rgba(48,208,160,0.3);text-align:right;color:#30d0a0;font-size:13px">-\u20AC' + IMPORT_VAT_ANNUAL.toLocaleString() + '</td><td style="padding:4px 8px;border-top:1px dashed rgba(48,208,160,0.3);text-align:right;color:#30d0a0;font-size:13px">-\u20AC' + IMPORT_VAT_K.toLocaleString() + '</td><td style="padding:4px 8px;border-top:1px dashed rgba(48,208,160,0.3)"></td><td style="padding:4px 8px;border-top:1px dashed rgba(48,208,160,0.3);font-size:11px;color:#30d0a0">B在德国 VAT申报中抵扣</td></tr>';
+  h += '<tr style="font-weight:700"><td style="padding:4px 8px;color:#30d0a0;font-size:11px">\u2205 B对EU代理商销售(VAT 0% Reverse Charge)</td><td style="padding:4px 8px;text-align:right;color:#30d0a0;font-size:13px">\u20AC0</td><td style="padding:4px 8px;text-align:right;color:#30d0a0;font-size:13px">\u20AC0</td><td></td><td style="padding:4px 8px;font-size:11px;color:#30d0a0">欧盟内部B2B供应,不征德国 VAT</td></tr>';
+  var netCash = Math.round(totalWithVAT) - IMPORT_VAT_ANNUAL;
+  h += '<tr style="font-weight:700;background:rgba(48,208,160,0.04)"><td style="padding:6px 8px;color:#30d0a0;font-size:12px">\u2606 实际现金支出 (含关税, VAT抵扣后)</td><td style="padding:6px 8px;text-align:right;color:#30d0a0;font-size:15px">\u20AC' + netCash.toLocaleString() + '</td><td style="padding:6px 8px;text-align:right;color:#30d0a0;font-size:15px">\u20AC' + (K(totalWithVAT) - IMPORT_VAT_K).toLocaleString() + '</td><td></td><td style="padding:6px 8px;font-size:11px;color:#30d0a0">VAT已抵扣,类为零成本</td></tr>';
+  t.innerHTML = h;
+})();
+
+// ===== VAT SUMMARY =====
+(function() {
+  var c = document.getElementById('vatSummary');
+  var vatBase = TRANSFER_PER_1000 + freightK + DUTY_K;
+  c.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:6px 0">' +
+    '<div style="padding:12px;border:1px solid rgba(224,192,64,0.25);border-radius:8px;background:rgba(224,192,64,0.03)">' +
+    '<div style="font-size:13px;font-weight:700;color:#e0c040;margin-bottom:6px">\uD83D\uDCCB 德国进口VAT</div>' +
+    '<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:12px"><span style="color:#6a7a9a">转移价(A→B)</span><span style="font-weight:600;color:#e0e8f4">\u20AC' + TRANSFER_PER_1000.toLocaleString() + '</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:12px"><span style="color:#6a7a9a">+ 国际海运</span><span style="font-weight:600;color:#e0e8f4">\u20AC' + freightK.toLocaleString() + '</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:12px"><span style="color:#6a7a9a">= CIF货值</span><span style="font-weight:600;color:#e0e8f4">\u20AC' + (TRANSFER_PER_1000 + freightK).toLocaleString() + '</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:12px"><span style="color:#6a7a9a">+ 进口关税 4%</span><span style="font-weight:600;color:#e0e8f4">\u20AC' + DUTY_K.toLocaleString() + '</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:12px;border-top:1px solid rgba(60,80,120,0.15)"><span style="color:#6a7a9a">= VAT应税基数</span><span style="font-weight:600;color:#e0e8f4">\u20AC' + vatBase.toLocaleString() + '</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:12px"><span style="color:#6a7a9a">\u00D7 德国 VAT税率 19%</span><span style="font-weight:700;color:#e0c040;font-size:14px">= \u20AC' + IMPORT_VAT_K.toLocaleString() + '</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:4px 0 0;font-size:11px;color:#30d0a0">\u2190 B可在 VAT申报中全额抵扣</div></div>' +
+    '<div style="padding:12px;border:1px solid rgba(90,172,255,0.25);border-radius:8px;background:rgba(90,172,255,0.03)">' +
+    '<div style="font-size:13px;font-weight:700;color:#5aacff;margin-bottom:6px">\uD83D\uDCCB B的VAT总体处理</div>' +
+    '<div style="padding:3px 0;font-size:12px"><span style="color:#6a7a9a">\u2460 进口VAT 输入税</span><span style="font-weight:600;color:#30d0a0;float:right">+\u20AC' + IMPORT_VAT_K.toLocaleString() + ' (可抵扣)</span></div>' +
+    '<div style="padding:3px 0;font-size:12px"><span style="color:#6a7a9a">\u2461 销售给EU代理商</span><span style="font-weight:600;color:#30d0a0;float:right">\u20AC0 (0% Reverse Charge)</span></div>' +
+    '<div style="padding:3px 0;font-size:12px"><span style="color:#6a7a9a">\u2462 B的增值部分(仓储+管理费用)</span><span style="font-weight:600;color:#30d0a0;float:right">含在货物价格中,0% VAT</span></div>' +
+    '<div style="padding:4px 0 0;margin-top:4px;border-top:1px solid rgba(60,80,120,0.15);font-size:12px"><span style="color:#6a7a9a;font-weight:600">\u2205 德国 VAT应纳税额</span><span style="font-weight:700;color:#30d0a0;font-size:14px;float:right">\u20AC0 (全额退税)</span></div>' +
+    '<div style="padding:2px 0 0;font-size:10px;color:#6a7a9a">\u203BB对EU代理商的跨境销售属EU内部B2B供应,德国征税0%(由代理商所在国Reverse Charge)</div></div></div>';
+})();
+
+// ===== AGENT (代理商视角对比) =====
+(function() {
+  var c = document.getElementById('agentSummary');
+  var agentFr = K(Ydata.freight);
+  var agentFrWeighted = Math.round(agentFr * 0.7);
+  var agentDuty = Math.round((FOB_PER_1000 + agentFrWeighted) * 0.04);
+  var agentCustomsW = Math.round(420 * 0.7);
+  var fobLanding = FOB_PER_1000 + agentFrWeighted + agentDuty + agentCustomsW + 600;
+  var vatFob = Math.round((FOB_PER_1000 + agentFrWeighted + agentDuty) * 0.19);
+  // Scenario 0% — B sells at FOB (same price as China procurement)
+  var bSell_0 = FOB_PER_1000;
+  var whLanding_0 = bSell_0 + 600;
+  // Scenario 10% — B sells at FOB + 10% uplift
+  var bSell_5 = Math.round(FOB_PER_1000 * 1.1);
+  var whLanding_5 = bSell_5 + 600;
+  c.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:8px 0">' +
+    '<div style="padding:12px;border:1px solid rgba(224,96,96,0.25);border-radius:8px;text-align:center"><div style="font-size:11px;color:#7a8aaa;font-weight:600">中国FOB直购(上海)</div><div style="font-size:26px;font-weight:800;color:#e06060;margin:4px 0">\u20AC' + fobLanding.toLocaleString() + '</div><div style="font-size:10px;color:#6a7a9a">FOB+海运+关税+清关+本地</div><div style="font-size:10px;color:#e06060;margin-top:4px">\u23F1\uFE0F 45-60天 \u00B7 \uD83D\uDCE6 FCL/LCL/随柜</div></div>' +
+      '<div style="padding:12px;border:1px solid rgba(48,208,160,0.25);border-radius:8px;text-align:center"><div style="font-size:11px;color:#30d0a0;font-weight:600">方案B1: 德国仓 (0%溢价)</div><div style="font-size:26px;font-weight:800;color:#30d0a0;margin:4px 0">\u20AC' + whLanding_0.toLocaleString() + '</div><div style="font-size:10px;color:#6a7a9a">B售价\u20AC' + bSell_0.toLocaleString() + '+本地\u20AC600</div><div style="font-size:10px;color:#30d0a0;margin-top:4px">比FOB到库-\u20AC' + (fobLanding - whLanding_0).toLocaleString() + ' · 零溢价省运费关税</div></div>' +
+      '<div style="padding:12px;border:1px solid rgba(90,172,255,0.25);border-radius:8px;text-align:center"><div style="font-size:11px;color:#5aacff;font-weight:600">方案B2: 德国仓 (10%溢价)</div><div style="font-size:26px;font-weight:800;color:#5aacff;margin:4px 0">\u20AC' + whLanding_5.toLocaleString() + '</div><div style="font-size:10px;color:#6a7a9a">B售价\u20AC' + bSell_5.toLocaleString() + '+本地\u20AC600</div><div style="font-size:10px;color:#5aacff;margin-top:4px">比FOB到库+\u20AC' + (whLanding_5 - fobLanding).toLocaleString() + '(+3.5%)</div></div></div>' +
+    '<div style="margin:10px 0 4px;padding:8px 12px;background:rgba(90,172,255,0.04);border:1px solid rgba(90,172,255,0.12);border-radius:8px"><div style="font-size:12px;font-weight:700;color:#e0e8f4;margin-bottom:6px">\uD83D\uDCCB 代理商到库成本对比 (\u20AC/1000件)</div>' +
+    '<table style="width:100%;border-collapse:collapse;font-size:11px"><thead><tr>' +
+    '<th style="padding:4px 6px;text-align:left;color:#7a8aaa;font-weight:600">成本项目</th>' +
+    '<th style="padding:4px 6px;text-align:right;color:#e06060;font-weight:600">中国FOB直购</th>' +
+    '<th style="padding:4px 6px;text-align:right;color:#30d0a0;font-weight:600">德国仓(0%)</th>' +
+    '<th style="padding:4px 6px;text-align:right;color:#5aacff;font-weight:600">德国仓(10%)</th></tr></thead><tbody>' +
+    '<tr><td style="padding:3px 6px;color:#6a7a9a">采购价 (FOB上海)</td><td style="padding:3px 6px;text-align:right;color:#e0e8f4">\u20AC' + FOB_PER_1000.toLocaleString() + '</td><td style="padding:3px 6px;text-align:right;color:#e0e8f4">\u20AC' + bSell_0.toLocaleString() + '</td><td style="padding:3px 6px;text-align:right;color:#e0e8f4">\u20AC' + bSell_5.toLocaleString() + '</td></tr>' +
+    '<tr><td style="padding:3px 6px;color:#6a7a9a">国际海运<span style="font-size:9px;color:#6a7a9a;margin-left:4px">(加权70%含运30%随车)</span></td><td style="padding:3px 6px;text-align:right;color:#e0e8f4">\u20AC' + agentFrWeighted.toLocaleString() + '</td><td style="padding:3px 6px;text-align:right;color:#30d0a0">\u20AC0</td><td style="padding:3px 6px;text-align:right;color:#30d0a0">\u20AC0</td></tr>' +
+    '<tr><td style="padding:3px 6px;color:#6a7a9a">进口关税4%</td><td style="padding:3px 6px;text-align:right;color:#e0e8f4">\u20AC' + agentDuty.toLocaleString() + '</td><td style="padding:3px 6px;text-align:right;color:#30d0a0">\u20AC0</td><td style="padding:3px 6px;text-align:right;color:#30d0a0">\u20AC0</td></tr>' +
+    '<tr><td style="padding:3px 6px;color:#6a7a9a">进口清关<span style="font-size:9px;color:#6a7a9a;margin-left:4px">(加权70%·30%随车无)</span></td><td style="padding:3px 6px;text-align:right;color:#e0e8f4">\u20AC' + agentCustomsW.toLocaleString() + '</td><td style="padding:3px 6px;text-align:right;color:#30d0a0">\u20AC0</td><td style="padding:3px 6px;text-align:right;color:#30d0a0">\u20AC0</td></tr>' +
+    '<tr><td style="padding:3px 6px;color:#6a7a9a">本地配送</td><td style="padding:3px 6px;text-align:right;color:#e0e8f4">\u20AC600</td><td style="padding:3px 6px;text-align:right;color:#e0e8f4">\u20AC600</td><td style="padding:3px 6px;text-align:right;color:#e0e8f4">\u20AC600</td></tr>' +
+    '<tr style="border-top:1px solid rgba(60,80,120,0.2)"><td style="padding:4px 6px;font-weight:700;color:#e0e8f4">到库总成本(不含VAT)</td><td style="padding:4px 6px;text-align:right;font-weight:700;color:#e06060">\u20AC' + fobLanding.toLocaleString() + '</td><td style="padding:4px 6px;text-align:right;font-weight:700;color:#30d0a0">\u20AC' + whLanding_0.toLocaleString() + '</td><td style="padding:4px 6px;text-align:right;font-weight:700;color:#5aacff">\u20AC' + whLanding_5.toLocaleString() + '</td></tr>' +
+    '<tr><td style="padding:3px 6px;color:#6a7a9a">进口VAT 19%(预付)</td><td style="padding:3px 6px;text-align:right;color:#e0c040">\u20AC' + vatFob.toLocaleString() + '(可抵扣)</td><td style="padding:3px 6px;text-align:right;color:#30d0a0">\u20AC0(0% RC)</td><td style="padding:3px 6px;text-align:right;color:#30d0a0">\u20AC0(0% RC)</td></tr>' +
+    '<tr style="border-top:1px solid rgba(60,80,120,0.15);background:rgba(48,208,160,0.04)"><td style="padding:5px 6px;font-weight:700;color:#e0e8f4;font-size:12px">含VAT到库总成本</td><td style="padding:5px 6px;text-align:right;font-weight:700;color:#e06060;font-size:13px">\u20AC' + (fobLanding + vatFob).toLocaleString() + '</td><td style="padding:5px 6px;text-align:right;font-weight:700;color:#30d0a0;font-size:13px">\u20AC' + whLanding_0.toLocaleString() + '</td><td style="padding:5px 6px;text-align:right;font-weight:700;color:#5aacff;font-size:13px">\u20AC' + whLanding_5.toLocaleString() + '</td></tr>' +
+    '<tr style="border-top:2px solid rgba(240,192,64,0.2)"><td style="padding:5px 6px;font-weight:700;color:#f0c040;font-size:11px">📈 毛利率</td><td style="padding:5px 6px;text-align:right;font-weight:700;color:#f0c040;font-size:12px">' + Math.round((FOB_PER_1000 - COST_PER_1000 - exportLandK) / FOB_PER_1000 * 100) + '%</td><td style="padding:5px 6px;text-align:right;font-weight:700;color:#30d0a0;font-size:12px">' + Math.round((bSell_0 - COST_PER_1000 - exportLandK - yusenWHK - freightK - DUTY_K) / bSell_0 * 100) + '%</td><td style="padding:5px 6px;text-align:right;font-weight:700;color:#5aacff;font-size:12px">' + Math.round((bSell_5 - COST_PER_1000 - exportLandK - yusenWHK - freightK - DUTY_K) / bSell_5 * 100) + '%</td></tr>' +
+    '<tr style="font-size:9px;color:#5a6a8a"><td style="padding:2px 6px">Scope:</td><td style="padding:2px 6px;text-align:right">SPS单体</td><td style="padding:2px 6px;text-align:right;color:#30d0a0">集团合并</td><td style="padding:2px 6px;text-align:right;color:#5aacff">集团合并</td></tr>' +
+    '</tbody></table></div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0">' +
+    '<div style="padding:8px 12px;border:1px solid rgba(224,96,96,0.12);border-radius:6px;font-size:11px;background:rgba(224,96,96,0.03)"><strong style="color:#e06060">FOB直购 代理商操作:</strong><br>' +
+    '①向SPS下采购单 (FOB上海 \u20AC' + FOB_PER_1000.toLocaleString() + '/千件)<br>' +
+    '②自行安排国际海运 (\u20AC' + agentFrWeighted.toLocaleString() + '/千件, 30%随车\u20AC0)<br>' +
+    '③目的国进口清关 (\u20AC' + agentCustomsW.toLocaleString() + '/千件, 加权70%, 30%随车无)<br>' +
+    '④缴纳关税4% (\u20AC' + agentDuty.toLocaleString() + ') + VAT 19% (\u20AC' + vatFob.toLocaleString() + ', 后续抵扣)<br>' +
+    '⑤安排本地拖车到库 (\u20AC600/千件)<br>' +
+    '<span style="color:#e06060">\u23F1\uFE0F 45-60天 \u00B7 需FCL/LCL起订量</span></div>' +
+    '<div style="padding:8px 12px;border:1px solid rgba(90,172,255,0.12);border-radius:6px;font-size:11px;background:rgba(90,172,255,0.03)"><strong style="color:#5aacff">德国仓 代理商操作:</strong><br>' +
+    '①向B下采购单 (B1=0%: \u20AC' + bSell_0.toLocaleString() + ' | B2=10%: \u20AC' + bSell_5.toLocaleString() + '/千件)<br>' +
+    '②B已清关入库, 无需办理进口手续<br>' +
+    '③3PL从德国仓直发到库 (\u20AC600/千件, 代理商付)<br>' +
+    '④VAT 0% (Reverse Charge, 无需预付)<br>' +
+    '⑤支持退换货至德国仓<br>' +
+    '<span style="color:#30d0a0">\u23F1\uFE0F 3-7天 \u00B7 任意数量 \u00B7 无清关风险</span></div></div>' +
+    '<div style="padding:10px 14px;border:1px solid rgba(90,172,255,0.12);border-radius:6px;text-align:center;font-size:12px;line-height:1.7;background:rgba(90,172,255,0.03)">\uD83C\uDFAF <strong style="color:#f0f4ff">代理商核心结论</strong>：<br><strong style="color:#30d0a0">溢价0%</strong><span style="color:#7a8aaa">：B1采购价=FOB价\u20AC28,448, 到库\u20AC' + whLanding_0.toLocaleString() + ', 比FOB直购到库节省\u20AC' + (fobLanding - whLanding_0).toLocaleString() + '/千件, 含VAT节省\u2212\u20AC' + ((fobLanding + vatFob) - whLanding_0).toLocaleString() + '</span><br><strong style="color:#5aacff">溢价10%</strong><span style="color:#7a8aaa">：B2到库\u20AC' + whLanding_5.toLocaleString() + ' (+3.5% vs FOB到库), 含VAT现金流节省\u20AC' + ((fobLanding + vatFob) - whLanding_5).toLocaleString() + '/千件, 仍具到货速度\u2193+清关\u2193优势。</span></div>';
+})();
+
+// ===== INIT =====
+setTheme('dark');
+
+(function() {
+  if (typeof gsap === 'undefined') return;
+  var els = document.querySelectorAll('.anim-fade, .anim-pop, .anim-left'); gsap.set(els, { opacity: 0 });
+  document.querySelectorAll('.anim-fade').forEach(function(el, i) { gsap.set(el, { y: 20 }); gsap.to(el, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.1 + i * 0.1 }); });
+  document.querySelectorAll('.anim-pop').forEach(function(el, i) { gsap.set(el, { scale: 0.92 }); gsap.to(el, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)', delay: 0.3 + i * 0.1 }); });
+  document.querySelectorAll('.anim-left').forEach(function(el, i) { gsap.set(el, { x: -25 }); gsap.to(el, { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out', delay: 0.2 + i * 0.08 }); });
+  // Dynamic KPI fill
+  var vk = document.getElementById('vatKpiVal');
+  if (vk) vk.textContent = IMPORT_VAT_K.toLocaleString();
+})();
+console.log('SPS model loaded v' + VERSION);
+</script>
+</body>
+</html>
